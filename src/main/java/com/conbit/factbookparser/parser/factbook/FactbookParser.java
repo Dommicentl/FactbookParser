@@ -1,4 +1,4 @@
-package com.conbit.FactbookParser;
+package com.conbit.factbookparser.parser.factbook;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,6 +9,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.conbit.factbookparser.MyLogger;
+import com.conbit.factbookparser.parser.factbook.country.CountryParser;
+
 public class FactbookParser {
 	private Logger logger = MyLogger.getInstance();
 	private static final String COUNTRY_PAGE_URL = "https://www.cia.gov/library/publications/the-world-factbook/geos/countrytemplate_[?].html";
@@ -16,38 +19,6 @@ public class FactbookParser {
 	public void parse(){
 		ArrayList<String> countries = getCountries();
 		parseCountries(countries);
-	}
-	
-	private void parseCountries(ArrayList<String> countryCodes) {
-		for(String currentCode: countryCodes){
-			parseCountry(currentCode);
-		}		
-	}
-
-	private void parseCountry(String countryCode) {
-		try {
-			Document countryPage = Jsoup.connect(COUNTRY_PAGE_URL.replaceAll("\\[\\?\\]", countryCode)).get();
-			getTitle(countryPage);
-			getContinent(countryPage);
-		} catch (IOException e) {
-			logger.error("Can't find the page of country "+countryCode+". Ignoring...");
-			e.printStackTrace();
-		}		
-	}
-
-	private String getContinent(Document countryPage) {
-		Elements continentElement = countryPage.select("div[class=region1]");
-		continentElement = continentElement.select("a");
-		String result = continentElement.text();
-		logger.debug("Continent: "+result);
-		return result;
-	}
-
-	private String getTitle(Document countryPage) {
-		Elements countryElement = countryPage.select("span[class=region_name1]");
-		String result = countryElement.text();
-		logger.debug("Name: "+result);
-		return result;
 	}
 
 	private ArrayList<String> getCountries(){
@@ -70,8 +41,27 @@ public class FactbookParser {
 		return result;
 	}
 	
+	private void parseCountries(ArrayList<String> countryCodes) {
+		for(String currentCode: countryCodes){
+			parseCountry(currentCode);
+		}		
+	}
+
+	private void parseCountry(String countryCode) {
+		try {
+			Document countryPage = Jsoup.connect(COUNTRY_PAGE_URL.replaceAll("\\[\\?\\]", countryCode)).get();
+			CountryParser countryParser = new CountryParser(countryPage);
+			countryParser.writeToFile();
+		} catch (IOException e) {
+			logger.error("Can't find the page of country "+countryCode+". Ignoring...");
+			e.printStackTrace();
+		}		
+	}
+	
 	public static void main(String[] args) {
 		FactbookParser parser = new FactbookParser();
 		parser.parse();
 	}
+	
+
 }
