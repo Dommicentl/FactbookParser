@@ -1,5 +1,7 @@
 package com.conbit.FactbookParser;
 
-public class TerroristParser {
+import org.apache.log4j.Logger;
 
+public class TerroristParser {
+	private Logger logger = MyLogger.getInstance();
 }
