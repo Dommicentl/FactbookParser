@@ -9,7 +9,7 @@ public class MyLogger {
 	private static MyLogger myLogger = new MyLogger();
 	
 	public MyLogger(){
-		PropertyConfigurator.configure("/home/jorn/log4j.conf");
+		PropertyConfigurator.configure("log4j.conf");
 	}
 	
 	public Logger getLogger(){
