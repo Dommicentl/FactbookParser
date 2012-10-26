@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
-import org.omg.CORBA.IRObject;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
