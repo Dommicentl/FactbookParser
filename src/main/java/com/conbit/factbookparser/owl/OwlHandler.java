@@ -11,6 +11,8 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
@@ -50,7 +52,8 @@ public class OwlHandler {
 		classIriMapper.put("Country", pm);
 	}
 
-	private void addIndividual(String className, String individualName) {
+	private boolean addIndividual(String className, String individualName) {
+		// TODO:check if the class name is valid!
 		PrefixManager pm = getCorrectPrefixManager(className);
 		OWLClass owlClass = factory.getOWLClass(":" + className, pm);
 		OWLNamedIndividual individual = factory.getOWLNamedIndividual(":"
@@ -58,9 +61,44 @@ public class OwlHandler {
 		OWLClassAssertionAxiom classAssertion = factory
 				.getOWLClassAssertionAxiom(owlClass, individual);
 		ontManager.addAxiom(ontology, classAssertion);
-		logger.debug("added individual "+individualName+" of class "+className);
-		//TODO:Save only at the end or at regular intervals
-		save();
+		logger.debug("added individual " + individualName + " of class "
+				+ className);
+		// TODO:Save only at the end or at regular intervals
+		return save();
+	}
+
+	public boolean addObjectRelation(String relation, String class1,
+			String individual1, String class2, String individual2) {
+		if (!isValidIndividual(class1, individual1)
+				|| !isValidIndividual(class2, individual2)
+				|| !isValidObjectRelation(relation)) {
+			logger.error("The given arguments are not valid");
+			return false;
+		}
+		OWLNamedIndividual owlIndividual1 = factory.getOWLNamedIndividual(":"
+				+ individual1, defaultPm);
+		OWLNamedIndividual owlIndividual2 = factory.getOWLNamedIndividual(":"
+				+ individual2, defaultPm);
+		OWLObjectProperty owlObjectPropertie = factory.getOWLObjectProperty(":"
+				+ relation, defaultPm);
+		OWLObjectPropertyAssertionAxiom axiom = factory
+				.getOWLObjectPropertyAssertionAxiom(owlObjectPropertie,
+						owlIndividual1, owlIndividual2);
+		ontManager.addAxiom(ontology, axiom);
+		logger.debug("Added raletion \"" + individual1 + " " + relation + " "
+				+ individual2 + "\"");
+		return save();
+	}
+
+	private boolean isValidObjectRelation(String objectRelation) {
+		IRI iri = IRI.create(defaultPm.getDefaultPrefix() + objectRelation);
+		return ontology.containsObjectPropertyInSignature(iri);
+	}
+
+	private boolean isValidIndividual(String class1, String individual1) {
+		PrefixManager pm = getCorrectPrefixManager(class1);
+		IRI iri = IRI.create(pm.getDefaultPrefix() + individual1);
+		return ontology.containsIndividualInSignature(iri);
 	}
 
 	private PrefixManager getCorrectPrefixManager(String className) {
@@ -70,12 +108,22 @@ public class OwlHandler {
 			return defaultPm;
 	}
 
-	private void save() {
+	private boolean save() {
 		try {
 			ontManager.saveOntology(ontology);
+			return true;
 		} catch (OWLOntologyStorageException e) {
 			logger.error("Could not save the ontology!");
 			e.printStackTrace();
+			return false;
 		}
+	}
+
+	public static void main(String[] args) {
+		OwlHandler handler = new OwlHandler("/home/leendert/factbook-ont.owl");
+		handler.addIndividual("Country", "Belgium");
+		handler.addIndividual("Continent", "Europe");
+		handler.addObjectRelation("contains", "Continent", "Europe", "Country",
+				"Belgium");
 	}
 }
