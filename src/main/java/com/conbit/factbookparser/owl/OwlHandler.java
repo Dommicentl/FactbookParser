@@ -30,6 +30,12 @@ public class OwlHandler {
 	private OWLOntologyManager ontManager;
 	private OWLDataFactory factory;
 
+	/**
+	 * Initiates the OwlHandler by reading the ontology from file
+	 * 
+	 * @param owlLocation
+	 *            | The location of the owl ontology that has to be loaded
+	 */
 	public OwlHandler(String owlLocation) {
 		initIriMapper();
 		ontManager = OWLManager.createOWLOntologyManager();
@@ -51,7 +57,17 @@ public class OwlHandler {
 		classIriMapper.put("Country", pm);
 	}
 
-	private boolean addIndividual(String className, String individualName) {
+	/**
+	 * Adds an individual to the ontology
+	 * 
+	 * @param className
+	 *            | The class name of the class for which you want to add an
+	 *            individual
+	 * @param individualName
+	 *            | The name of the individual
+	 * @return True of the individual is added successfully, False if not
+	 */
+	public boolean addIndividual(String className, String individualName) {
 		// TODO:check if the class name is valid!
 		PrefixManager pm = getCorrectPrefixManager(className);
 		OWLClass owlClass = factory.getOWLClass(":" + className, pm);
@@ -66,6 +82,21 @@ public class OwlHandler {
 		return save();
 	}
 
+	/**
+	 * Adds an object relation to the ontology
+	 * 
+	 * @param relation
+	 *            | The name of the relation
+	 * @param class1
+	 *            | The name of the class of the first individual
+	 * @param individual1
+	 *            | The name of the first individual
+	 * @param class2
+	 *            | The name of the class of the second individual
+	 * @param individual2
+	 *            | The name of the second individual
+	 * @return True if the relation is added, False if not
+	 */
 	public boolean addObjectRelation(String relation, String class1,
 			String individual1, String class2, String individual2) {
 		if (!isValidIndividual(class1, individual1)
