@@ -28,7 +28,7 @@ public class FactbookParser {
 			logger.info(+countries.size()+"countries found.");
 			for(Element current: countries){
 				String code = current.attr("value");
-				if(!code.isEmpty()){
+				if(!code.isEmpty() && !code.equals("xx")){
 					result.add(code);
 					logger.debug("Country code "+code+" found.");
 				}
@@ -50,7 +50,7 @@ public class FactbookParser {
 		try {
 			Document countryPage = Jsoup.connect(COUNTRY_PAGE_URL.replaceAll("\\[\\?\\]", countryCode)).get();
 			CountryParser countryParser = new CountryParser(countryPage);
-			countryParser.writeToFile();
+			//countryParser.writeToFile();
 		} catch (IOException e) {
 			logger.error("Can't find the page of country "+countryCode+". Ignoring...");
 			e.printStackTrace();

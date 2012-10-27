@@ -123,6 +123,13 @@ public class OwlHandler {
 		return save();
 	}
 
+	/**
+	 * Adding a data property
+	 * @param property
+	 * @param individual
+	 * @param value
+	 * @return | true if added
+	 */
 	public boolean addDataProperty(String property, String individual, String value){
 		if(!isValidIndividual(individual) || !isValidDataProperty(property)){
 			logger.error("The given argument is not valid");
@@ -143,7 +150,6 @@ public class OwlHandler {
 
 	private boolean isValidDataProperty(String dataProperty){
 		IRI iri = IRI.create(getCorrectPrefixManager(dataProperty).getDefaultPrefix() + dataProperty);
-		System.out.println(iri);
 		return ontology.containsDataPropertyInSignature(iri);
 	}
 
