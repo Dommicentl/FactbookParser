@@ -72,7 +72,7 @@ public class OwlHandler {
 		PrefixManager pm = getCorrectPrefixManager(className);
 		OWLClass owlClass = factory.getOWLClass(":" + className, pm);
 		OWLNamedIndividual individual = factory.getOWLNamedIndividual(":"
-				+ individualName, pm);
+				+ individualName, defaultPm);
 		OWLClassAssertionAxiom classAssertion = factory
 				.getOWLClassAssertionAxiom(owlClass, individual);
 		ontManager.addAxiom(ontology, classAssertion);
@@ -97,10 +97,9 @@ public class OwlHandler {
 	 *            | The name of the second individual
 	 * @return True if the relation is added, False if not
 	 */
-	public boolean addObjectRelation(String relation, String class1,
-			String individual1, String class2, String individual2) {
-		if (!isValidIndividual(class1, individual1)
-				|| !isValidIndividual(class2, individual2)
+	public boolean addObjectRelation(String relation, String individual1,
+			String individual2) {
+		if (!isValidIndividual(individual1) || !isValidIndividual(individual2)
 				|| !isValidObjectRelation(relation)) {
 			logger.error("The given arguments are not valid");
 			return false;
@@ -125,9 +124,8 @@ public class OwlHandler {
 		return ontology.containsObjectPropertyInSignature(iri);
 	}
 
-	private boolean isValidIndividual(String class1, String individual1) {
-		PrefixManager pm = getCorrectPrefixManager(class1);
-		IRI iri = IRI.create(pm.getDefaultPrefix() + individual1);
+	private boolean isValidIndividual(String individual1) {
+		IRI iri = IRI.create(defaultPm.getDefaultPrefix() + individual1);
 		return ontology.containsIndividualInSignature(iri);
 	}
 
@@ -153,7 +151,6 @@ public class OwlHandler {
 		OwlHandler handler = new OwlHandler("/home/leendert/factbook-ont.owl");
 		handler.addIndividual("Country", "Belgium");
 		handler.addIndividual("Continent", "Europe");
-		handler.addObjectRelation("contains", "Continent", "Europe", "Country",
-				"Belgium");
+		handler.addObjectRelation("contains", "Europe", "Belgium");
 	}
 }
