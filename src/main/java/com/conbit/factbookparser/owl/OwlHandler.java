@@ -109,10 +109,10 @@ public class OwlHandler {
 				+ individual1, defaultPm);
 		OWLNamedIndividual owlIndividual2 = factory.getOWLNamedIndividual(":"
 				+ individual2, defaultPm);
-		OWLObjectProperty owlObjectPropertie = factory.getOWLObjectProperty(":"
+		OWLObjectProperty owlObjectProperty = factory.getOWLObjectProperty(":"
 				+ relation, defaultPm);
 		OWLObjectPropertyAssertionAxiom axiom = factory
-				.getOWLObjectPropertyAssertionAxiom(owlObjectPropertie,
+				.getOWLObjectPropertyAssertionAxiom(owlObjectProperty,
 						owlIndividual1, owlIndividual2);
 		ontManager.addAxiom(ontology, axiom);
 		logger.debug("Added raletion \"" + individual1 + " " + relation + " "

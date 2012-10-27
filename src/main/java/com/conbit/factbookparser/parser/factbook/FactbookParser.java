@@ -10,7 +10,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.conbit.factbookparser.MyLogger;
-import com.conbit.factbookparser.parser.factbook.country.CountryParser;
 
 public class FactbookParser {
 	private Logger logger = MyLogger.getInstance();

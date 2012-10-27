@@ -1,4 +1,4 @@
-package com.conbit.factbookparser.parser.factbook.country;
+package com.conbit.factbookparser.parser.factbook;
 
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Document;
