@@ -9,6 +9,8 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
@@ -35,8 +37,9 @@ public class OwlHandler {
 	 * 
 	 * @param owlLocation
 	 *            | The location of the owl ontology that has to be loaded
+	 * @throws OWLOntologyCreationException 
 	 */
-	public OwlHandler(String owlLocation) {
+	public OwlHandler(String owlLocation) throws OWLOntologyCreationException {
 		initIriMapper();
 		ontManager = OWLManager.createOWLOntologyManager();
 		File owlFile = new File(owlLocation);
@@ -46,8 +49,7 @@ public class OwlHandler {
 					.getOntologyIRI() + "#");
 			factory = ontManager.getOWLDataFactory();
 		} catch (OWLOntologyCreationException e) {
-			logger.error("Couldn't load owl file " + owlLocation);
-			e.printStackTrace();
+			throw e;
 		}
 	}
 
@@ -55,6 +57,9 @@ public class OwlHandler {
 		PrefixManager pm = new DefaultPrefixManager(
 				"http://www.daml.org/2001/09/countries/fips-10-4-ont#");
 		classIriMapper.put("Country", pm);
+		pm = new DefaultPrefixManager(
+				"http://www.daml.org/2001/09/countries/fips-10-4-ont#");
+		classIriMapper.put("code", pm);
 	}
 
 	/**
@@ -97,8 +102,7 @@ public class OwlHandler {
 	 *            | The name of the second individual
 	 * @return True if the relation is added, False if not
 	 */
-	public boolean addObjectRelation(String relation, String individual1,
-			String individual2) {
+	public boolean addObjectRelation(String individual1, String relation, String individual2) {
 		if (!isValidIndividual(individual1) || !isValidIndividual(individual2)
 				|| !isValidObjectRelation(relation)) {
 			logger.error("The given arguments are not valid");
@@ -114,9 +118,33 @@ public class OwlHandler {
 				.getOWLObjectPropertyAssertionAxiom(owlObjectProperty,
 						owlIndividual1, owlIndividual2);
 		ontManager.addAxiom(ontology, axiom);
-		logger.debug("Added raletion \"" + individual1 + " " + relation + " "
+		logger.debug("Added relation \"" + individual1 + " " + relation + " "
 				+ individual2 + "\"");
 		return save();
+	}
+
+	public boolean addDataProperty(String property, String individual, String value){
+		if(!isValidIndividual(individual) || !isValidDataProperty(property)){
+			logger.error("The given argument is not valid");
+			return false;
+		}
+		OWLNamedIndividual owlIndividual = factory.getOWLNamedIndividual(":"
+				+ individual, defaultPm);
+		OWLDataProperty owlDataProperty = factory.getOWLDataProperty(":"
+				+ property, defaultPm);
+		OWLDataPropertyAssertionAxiom axiom = factory
+				.getOWLDataPropertyAssertionAxiom(owlDataProperty,
+						owlIndividual, value);
+		ontManager.addAxiom(ontology, axiom);
+		logger.debug("Added property \"" + property + " = " + value + " to " + individual + "\"");
+		return save();
+	}
+
+
+	private boolean isValidDataProperty(String dataProperty){
+		IRI iri = IRI.create(getCorrectPrefixManager(dataProperty).getDefaultPrefix() + dataProperty);
+		System.out.println(iri);
+		return ontology.containsDataPropertyInSignature(iri);
 	}
 
 	private boolean isValidObjectRelation(String objectRelation) {
@@ -147,10 +175,23 @@ public class OwlHandler {
 		}
 	}
 
-	public static void main(String[] args) {
-		OwlHandler handler = new OwlHandler("/home/leendert/factbook-ont.owl");
+	private static String location1 = "/media/Data/Documenten/KUL/Master/2ejaar/1e sem/advanced databases/homework2/factbook-ont.owl";
+	private static String location2 = "/home/leendert/factbook-ont.owl";
+
+	public static void main(String[] args)  {
+		OwlHandler handler = null;
+		try{
+			handler = new OwlHandler(location1);
+		} catch(Exception e){
+			try {
+				handler = new OwlHandler(location2);
+			} catch (Exception e2){
+				e2.printStackTrace();
+			}
+		}
 		handler.addIndividual("Country", "Belgium");
 		handler.addIndividual("Continent", "Europe");
-		handler.addObjectRelation("contains", "Europe", "Belgium");
+		handler.addObjectRelation("Belgium", "liesIn", "Europe");
+		handler.addDataProperty("airports", "Belgium", "3");
 	}
 }
