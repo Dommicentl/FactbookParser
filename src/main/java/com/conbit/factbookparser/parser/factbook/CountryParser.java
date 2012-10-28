@@ -20,8 +20,8 @@ public class CountryParser {
 		this.countryPage = countryPage;
 		country = new Country(parseCountryName());
 		ArrayList<FilteredProperty> properties = parse();
-		PropertyConvertor convertor = new PropertyConvertor(properties);
-		convertor.convertTo(country);
+		PropertyConvertor convertor = new PropertyConvertor(properties, country);
+		convertor.convertToCountry();
 		country.writeToFile();
 	}
 	
@@ -51,14 +51,14 @@ public class CountryParser {
 		for(BigPropertyBlock bigBlock: bigBlocks ){
 			Elements subProperties = bigBlock.getContent().select("td").select("div[class=category]");
 			if(subProperties.isEmpty()){
-				filteredProperties.add(new FilteredProperty(bigBlock.getTitle().text(), bigBlock.getContent().text()));
-				logger.debug("Found property: " + bigBlock.getTitle().text() + " = " + bigBlock.getContent().text());
+				filteredProperties.add(new FilteredProperty(toCamelCase(bigBlock.getTitle().text()), bigBlock.getContent().text()));
+				logger.debug("Found property: " + toCamelCase(bigBlock.getTitle().text()) + " = " + bigBlock.getContent().text());
 			}
 			else{
 				for(Element subProperty : subProperties){
 					try{
-						filteredProperties.add(new FilteredProperty(subProperty.text().split(":")[0]+bigBlock.getTitle().text(), subProperty.text().split(":")[1]));
-						logger.debug("Found property: " + subProperty.text().split(":")[0] + " " +bigBlock.getTitle().text() + " = " + subProperty.text().split(":")[1]);
+						filteredProperties.add(new FilteredProperty(toCamelCase(subProperty.text().split(":")[0] + " " +bigBlock.getTitle().text()), subProperty.text().split(":")[1]));
+						logger.debug("Found property: " + toCamelCase(subProperty.text().split(":")[0] + " " +bigBlock.getTitle().text()) + " = " + subProperty.text().split(":")[1]);
 					} catch (Exception e){
 						logger.error("No value found for: " + subProperty.text().split(":")[0]);
 					}
@@ -85,7 +85,11 @@ public class CountryParser {
 		   for (String part : parts){
 		      camelCaseString = camelCaseString + toProperCase(part);
 		   }
-		   return camelCaseString.substring(0, 1).toLowerCase();
+		   if (camelCaseString.contains(":"))
+			   camelCaseString = camelCaseString.replace(":",	"");
+		   if (camelCaseString.contains("-"))
+			   camelCaseString = camelCaseString.replace("-",	"");
+		   return camelCaseString.substring(0, 1).toLowerCase() + camelCaseString.substring(1);
 		}
 
 	private String toProperCase(String s) {

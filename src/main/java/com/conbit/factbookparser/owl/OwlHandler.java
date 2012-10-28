@@ -132,7 +132,7 @@ public class OwlHandler {
 	 */
 	public boolean addDataProperty(String property, String individual, String value){
 		if(!isValidIndividual(individual) || !isValidDataProperty(property)){
-			logger.error("The given argument is not valid");
+			logger.error("The given argument is not valid --> individual=" + individual + " and  property=" + property );
 			return false;
 		}
 		OWLNamedIndividual owlIndividual = factory.getOWLNamedIndividual(":"
