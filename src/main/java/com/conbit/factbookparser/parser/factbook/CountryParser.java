@@ -11,7 +11,7 @@ import com.conbit.factbookparser.MyLogger;
 import com.conbit.factbookparser.concept.Country;
 
 public class CountryParser {
-	
+
 	private Document countryPage;
 	private Logger logger = MyLogger.getInstance();
 	private Country country;
@@ -24,7 +24,7 @@ public class CountryParser {
 		convertor.convertToCountry();
 		country.writeToFile();
 	}
-	
+
 	private ArrayList<FilteredProperty> parse(){
 		Elements mainTables = countryPage.select("table[width=638][cellpadding=0][cellspacing=0]");
 		Element informationTable = mainTables.get(2);
@@ -45,11 +45,12 @@ public class CountryParser {
 		}
 		return parseBigPropertyBlocks(bigBlocks);
 	}
-	
+
 	private ArrayList<FilteredProperty> parseBigPropertyBlocks(ArrayList<BigPropertyBlock> bigBlocks) {
 		ArrayList<FilteredProperty> filteredProperties = new ArrayList<FilteredProperty>();
 		for(BigPropertyBlock bigBlock: bigBlocks ){
 			Elements subProperties = bigBlock.getContent().select("td").select("div[class=category]");
+			subProperties = removeNoteSubs(subProperties);
 			if(subProperties.isEmpty()){
 				filteredProperties.add(new FilteredProperty(toCamelCase(bigBlock.getTitle().text()), bigBlock.getContent().text()));
 				logger.debug("Found property: " + toCamelCase(bigBlock.getTitle().text()) + " = " + bigBlock.getContent().text());
@@ -57,8 +58,8 @@ public class CountryParser {
 			else{
 				for(Element subProperty : subProperties){
 					try{
-						filteredProperties.add(new FilteredProperty(toCamelCase(subProperty.text().split(":")[0] + " " +bigBlock.getTitle().text()), subProperty.text().split(":")[1]));
-						logger.debug("Found property: " + toCamelCase(subProperty.text().split(":")[0] + " " +bigBlock.getTitle().text()) + " = " + subProperty.text().split(":")[1]);
+							filteredProperties.add(new FilteredProperty(toCamelCase(subProperty.text().split(":")[0] + " " +bigBlock.getTitle().text()), subProperty.text().split(":")[1]));
+							logger.debug("Found property: " + toCamelCase(subProperty.text().split(":")[0] + " " +bigBlock.getTitle().text()) + " = " + subProperty.text().split(":")[1]);
 					} catch (Exception e){
 						logger.error("No value found for: " + subProperty.text().split(":")[0]);
 					}
@@ -68,33 +69,44 @@ public class CountryParser {
 		return filteredProperties;
 	}
 
+	private Elements removeNoteSubs(Elements subProperties) {
+		Elements removedNoteBlockList = new Elements();
+		for(Element e : subProperties){
+			if (e.text().contains("note")){}
+			else{
+				removedNoteBlockList.add(e);
+			}
+		}
+		return removedNoteBlockList;
+	}
+
 	public void writeToFile(){
 		country.writeToFile();
 	}
-	
+
 	private String parseCountryName() {
 		Elements countryElement = countryPage.select("span[class=region_name1]");
 		String result = countryElement.text();
 		logger.debug("Name: "+result);
 		return result;
 	}
-	
+
 	private String toCamelCase(String s){
-		   String[] parts = s.split(" ");
-		   String camelCaseString = "";
-		   for (String part : parts){
-		      camelCaseString = camelCaseString + toProperCase(part);
-		   }
-		   if (camelCaseString.contains(":"))
-			   camelCaseString = camelCaseString.replace(":",	"");
-		   if (camelCaseString.contains("-"))
-			   camelCaseString = camelCaseString.replace("-",	"");
-		   return camelCaseString.substring(0, 1).toLowerCase() + camelCaseString.substring(1);
+		String[] parts = s.split(" ");
+		String camelCaseString = "";
+		for (String part : parts){
+			camelCaseString = camelCaseString + toProperCase(part);
 		}
+		if (camelCaseString.contains(":"))
+			camelCaseString = camelCaseString.replace(":",	"");
+		if (camelCaseString.contains("-"))
+			camelCaseString = camelCaseString.replace("-",	"");
+		return camelCaseString.substring(0, 1).toLowerCase() + camelCaseString.substring(1);
+	}
 
 	private String toProperCase(String s) {
-		    return s.substring(0, 1).toUpperCase() +
-	               s.substring(1).toLowerCase();
+		return s.substring(0, 1).toUpperCase() +
+				s.substring(1).toLowerCase();
 	}
 
 }

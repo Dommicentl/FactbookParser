@@ -106,11 +106,11 @@ public class PropertyConvertor {
 		if(htmlProperty.getProperty().equals("highest10%HouseholdIncomeOrConsumptionByPercentageShare"))
 			htmlProperty.renameProperty("householdIncomeHighest10Percent");
 		if(htmlProperty.getProperty().equals("totalInfantMortalityRate"))
-			htmlProperty.renameProperty("infantMortilityRateTotal");
+			htmlProperty.renameProperty("infantMortalityRateTotal");
 		if(htmlProperty.getProperty().equals("femaleInfantMortalityRate"))
-			htmlProperty.renameProperty("infantMortilityRateFemale");
+			htmlProperty.renameProperty("infantMortalityRateFemale");
 		if(htmlProperty.getProperty().equals("maleInfantMortalityRate"))
-			htmlProperty.renameProperty("infantMortilityRateMale");
+			htmlProperty.renameProperty("infantMortalityRateMale");
 		if(htmlProperty.getProperty().equals("inflationRate(consumerPrices)"))
 			htmlProperty.renameProperty("inflationRate");
 		if(htmlProperty.getProperty().equals("disputesInternational"))
@@ -122,7 +122,7 @@ public class PropertyConvertor {
 		if(htmlProperty.getProperty().equals("maleLiteracy"))
 			htmlProperty.renameProperty("literacyMale");
 		if(htmlProperty.getProperty().equals("femaleLiteracy"))
-			htmlProperty.renameProperty("literacyFeale");
+			htmlProperty.renameProperty("literacyFemale");
 		if(htmlProperty.getProperty().equals("telephonesMainLinesInUse"))
 			htmlProperty.renameProperty("mainTelephoneLines");
 		if(htmlProperty.getProperty().equals("malesAge1649ManpowerAvailableForMilitaryService"))
@@ -167,8 +167,13 @@ public class PropertyConvertor {
 			htmlProperty.renameProperty("internetServiceProviders");
 		if(htmlProperty.getProperty().equals("gdp(officialExchangeRate)"))
 			htmlProperty.renameProperty("grossDomesticProduct");
+		if(htmlProperty.getProperty().equals("gdpPerCapita(ppp)"))
+			htmlProperty.renameProperty("grossDomesticProductPerCapita");
+		
+		
+		
 		for (PropertyType owlProperty : PropertyType.values()) {
-			  if(owlProperty.toString().toLowerCase().contains(htmlProperty.getProperty().toLowerCase())){
+			  if(owlProperty.toString().equals(htmlProperty.getProperty())){
 				  Property countryProperty = new Property(country.getIndividualName(), owlProperty, htmlProperty.getValue());
 				  country.addProperty(countryProperty);
 				  return true;
