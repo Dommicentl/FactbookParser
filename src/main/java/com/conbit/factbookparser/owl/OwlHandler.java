@@ -72,8 +72,12 @@ public class OwlHandler {
 	 *            | The name of the individual
 	 * @return True of the individual is added successfully, False if not
 	 */
-	public boolean addIndividual(String className, String individualName) {
-		// TODO:check if the class name is valid!
+	public boolean addIndividual(String className, String individualName)  {
+		if(! isValidClassName(className)){
+//			logger.error("The classname '" + className + "' is not valid!");
+//			return false;
+		}
+		individualName = individualName.replace(" ", "_");
 		PrefixManager pm = getCorrectPrefixManager(className);
 		OWLClass owlClass = factory.getOWLClass(":" + className, pm);
 		OWLNamedIndividual individual = factory.getOWLNamedIndividual(":"
@@ -103,6 +107,8 @@ public class OwlHandler {
 	 * @return True if the relation is added, False if not
 	 */
 	public boolean addObjectRelation(String individual1, String relation, String individual2) {
+		individual1 = individual1.replace(" ", "_");
+		individual2 = individual2.replace(" ", "_");
 		if (!isValidIndividual(individual1) || !isValidIndividual(individual2)
 				|| !isValidObjectRelation(relation)) {
 			logger.error("The given arguments are not valid");
@@ -131,6 +137,7 @@ public class OwlHandler {
 	 * @return | true if added
 	 */
 	public boolean addDataProperty(String property, String individual, String value){
+		individual = individual.replace(" ", "_");
 		if(!isValidIndividual(individual) || !isValidDataProperty(property)){
 			logger.error("The given argument is not valid --> individual=" + individual + " and  property=" + property );
 			return false;
@@ -145,6 +152,11 @@ public class OwlHandler {
 		ontManager.addAxiom(ontology, axiom);
 		logger.debug("Added property \"" + property + " = " + value + " to " + individual + "\"");
 		return save();
+	}
+	
+	private boolean isValidClassName(String className){
+		IRI iri = IRI.create(defaultPm.getDefaultPrefix() + className);
+		return ontology.containsDataPropertyInSignature(iri);
 	}
 
 
@@ -195,9 +207,9 @@ public class OwlHandler {
 				e2.printStackTrace();
 			}
 		}
-		handler.addIndividual("Country", "Belgium");
-		handler.addIndividual("Continent", "Europe");
-		handler.addObjectRelation("Belgium", "liesIn", "Europe");
-		handler.addDataProperty("airports", "Belgium", "3");
+		handler.addIndividual("Country", "Afghanistan");
+//		handler.addIndividual("Continent", "Europe");
+//		handler.addObjectRelation("Belgium", "liesIn", "Europe");
+//		handler.addDataProperty("airports", "Belgium", "3");
 	}
 }

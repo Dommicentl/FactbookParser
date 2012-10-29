@@ -48,6 +48,7 @@ public enum PropertyType {
 	fiscalYear,
 	flagDescription,
 	formerCountryName,
+	geographicCoordinates,
 	grossDomesticProduct,
 	grossDomesticProductComposition,
 	grossDomesticProductAgriculture,
