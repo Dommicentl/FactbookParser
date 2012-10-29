@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -17,13 +18,19 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.conbit.factbookparser.MyLogger;
 import com.conbit.factbookparser.concept.Attack;
+import com.conbit.factbookparser.owl.OwlHandler;
 
 public class TerroristParser {
 	private Logger logger = MyLogger.getInstance();
+	private OwlHandler owlHandler;
 
 	public static void main(String[] args) throws Exception {
-		TerroristParser parser = new TerroristParser();
+		TerroristParser parser = new TerroristParser("/home/leendert/factbook-ont.owl");
 		parser.readCsv("/home/leendert/globalterrorismdb_0611dist.uft8.csv");
+	}
+	
+	public TerroristParser(String owlLocation) throws OWLOntologyCreationException{
+		owlHandler =  new OwlHandler(owlLocation);
 	}
 
 	private void readCsv(String fileLocation) throws Exception {
@@ -68,6 +75,7 @@ public class TerroristParser {
 		attack.addPerpetrator((String) attackMap.get("gname"));
 		attack.addPerpetrator((String) attackMap.get("gname2"));
 		attack.addPerpetrator((String) attackMap.get("gname3"));
+		attack.writeToOwl(owlHandler);
 	}
 
 	private static CellProcessor[] getProcessors() {
