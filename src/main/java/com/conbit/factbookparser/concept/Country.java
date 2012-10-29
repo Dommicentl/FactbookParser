@@ -32,7 +32,11 @@ public class Country {
 			owl.addDataProperty(p.getPropery(), this.individualName, p.getValue());
 		}
 		for(Relation r : relations){
-			owl.addObjectRelation(r.getFirst(), r.getRelation(), r.getSecond());
+			if(! owl.addObjectRelation(r.getFirst(), r.getRelation(), r.getSecond())){
+				owl.addIndividual(r.getDomainClass(), r.getFirst());
+				owl.addIndividual(r.getRangeClass(), r.getSecond());
+				owl.addObjectRelation(r.getFirst(), r.getRelation(), r.getSecond());
+			}
 		}
 	}
 	
