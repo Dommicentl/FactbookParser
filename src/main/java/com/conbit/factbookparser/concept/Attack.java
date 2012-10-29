@@ -6,36 +6,38 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.conbit.factbookparser.MyLogger;
+import com.conbit.factbookparser.owl.OwlHandler;
 
 public class Attack {
 	private Logger logger = MyLogger.getInstance();
 
-	private long id;
-	private int nb_of_fatalities;
+	private String id;
+	private String nb_of_fatalities;
 	private String date;
 	private List<String> hasVictim = new ArrayList<String>();
 	private List<String> ofType = new ArrayList<String>();
-	private List<String> perpetrators;
+	private List<String> perpetrators = new ArrayList<String>();
 
-	public Attack(long id, int nb_of_fatalities, String date) {
+	public Attack(String id, String nb_of_fatalities, String date) {
 		this.id = id;
 		this.nb_of_fatalities = nb_of_fatalities;
 		this.date = date;
+		logger.debug("Attack created with id "+id+" and "+nb_of_fatalities+" fatalities on "+date);
 	}
 
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public int getNb_of_fatalities() {
+	public String getNb_of_fatalities() {
 		return nb_of_fatalities;
 	}
 
-	public void setNb_of_fatalities(int nb_of_fatalities) {
+	public void setNb_of_fatalities(String nb_of_fatalities) {
 		this.nb_of_fatalities = nb_of_fatalities;
 	}
 
@@ -48,11 +50,12 @@ public class Attack {
 	}
 
 	public boolean addHasVictim(String hasVictim) {
-		if (hasVictim.isEmpty()) {
+		if (hasVictim == null || hasVictim.isEmpty() || hasVictim.equals(".")) {
 			logger.debug("The given victim is empty");
 			return false;
 		}
 		this.hasVictim.add(hasVictim);
+		logger.debug("Victim "+hasVictim+" added.");
 		return true;
 	}
 
@@ -62,15 +65,17 @@ public class Attack {
 			return false;
 		}
 		this.hasVictim.remove(hasVictim);
+		logger.debug("Victim "+hasVictim+" removed.");
 		return true;
 	}
 
 	public boolean addOfType(String ofType) {
-		if (ofType.isEmpty()) {
+		if (ofType == null | ofType.isEmpty() || ofType.equals(".")) {
 			logger.debug("The given type is empty");
 			return false;
 		}
 		this.ofType.add(ofType);
+		logger.debug("Type "+ofType+" added.");
 		return true;
 	}
 
@@ -80,15 +85,17 @@ public class Attack {
 			return false;
 		}
 		this.ofType.remove(ofType);
+		logger.debug("Type "+ofType+" removed.");
 		return true;
 	}
 
 	public boolean addPerpetrator(String perpetrator) {
-		if (perpetrator.isEmpty()) {
+		if (perpetrator == null || perpetrator.isEmpty() || perpetrator.equals(".")) {
 			logger.debug("The given perpetrator is empty");
 			return false;
 		}
 		this.perpetrators.add(perpetrator);
+		logger.debug("Perpetrator "+perpetrator+" added.");
 		return true;
 	}
 
@@ -98,6 +105,12 @@ public class Attack {
 			return false;
 		}
 		this.perpetrators.remove(perpetrator);
+		logger.debug("Perpetrator "+perpetrator+" removed.");
+		return true;
+	}
+	
+	public boolean writeToOwl(OwlHandler handler){
+		handler.addIndividual("Attack", ""+id);
 		return true;
 	}
 
