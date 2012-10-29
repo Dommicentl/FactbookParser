@@ -9,14 +9,15 @@ import com.conbit.factbookparser.MyLogger;
 
 public class Attack {
 	private Logger logger = MyLogger.getInstance();
-	
+
 	private long id;
 	private int nb_of_fatalities;
 	private String date;
 	private List<String> hasVictim = new ArrayList<String>();
 	private List<String> ofType = new ArrayList<String>();
-	
-	public Attack(long id, int nb_of_fatalities, String date){
+	private String perpetrator;
+
+	public Attack(long id, int nb_of_fatalities, String date) {
 		this.id = id;
 		this.nb_of_fatalities = nb_of_fatalities;
 		this.date = date;
@@ -45,40 +46,49 @@ public class Attack {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	
-	public boolean addHasVictim(String hasVictim){
-		if(hasVictim.isEmpty()){
+
+	public boolean addHasVictim(String hasVictim) {
+		if (hasVictim.isEmpty()) {
 			logger.debug("The given victim is empty");
 			return false;
 		}
 		this.hasVictim.add(hasVictim);
 		return true;
 	}
-	
-	public boolean removeHasVictim(String hasVictim){
-		if(!hasVictim.contains(hasVictim)){
+
+	public boolean removeHasVictim(String hasVictim) {
+		if (!hasVictim.contains(hasVictim)) {
 			logger.error("Can't remove victim because it isn't in the list.");
 			return false;
 		}
 		this.hasVictim.remove(hasVictim);
 		return true;
 	}
-	
-	public boolean addOfType(String ofType){
-		if(ofType.isEmpty()){
+
+	public boolean addOfType(String ofType) {
+		if (ofType.isEmpty()) {
 			logger.debug("The given type is empty");
 			return false;
 		}
 		this.ofType.add(ofType);
 		return true;
 	}
-	
-	public boolean removeOfType(String ofType){
-		if(!ofType.contains(ofType)){
+
+	public boolean removeOfType(String ofType) {
+		if (!ofType.contains(ofType)) {
 			logger.error("Can't remove type because it isn't in the list.");
 			return false;
 		}
 		this.ofType.remove(ofType);
 		return true;
 	}
+
+	public String getPerpetrator() {
+		return perpetrator;
+	}
+
+	public void setPerpetrator(String perpetrator) {
+		this.perpetrator = perpetrator;
+	}
+
 }
