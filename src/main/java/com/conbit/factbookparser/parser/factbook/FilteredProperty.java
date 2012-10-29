@@ -23,4 +23,8 @@ public class FilteredProperty {
 		return property;
 	}
 	
+	public void renameProperty(String newName){
+		property = newName;
+	}
+	
 }
