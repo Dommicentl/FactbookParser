@@ -16,6 +16,7 @@ import org.supercsv.io.ICsvMapReader;
 import org.supercsv.prefs.CsvPreference;
 
 import com.conbit.factbookparser.MyLogger;
+import com.conbit.factbookparser.concept.Attack;
 
 public class TerroristParser {
 	private Logger logger = MyLogger.getInstance();
@@ -24,7 +25,7 @@ public class TerroristParser {
 		TerroristParser parser = new TerroristParser();
 		parser.readCsv("/home/leendert/globalterrorismdb_0611dist.uft8.csv");
 	}
-	
+
 	private void readCsv(String fileLocation) throws Exception {
 
 		ICsvMapReader mapReader = null;
@@ -36,9 +37,9 @@ public class TerroristParser {
 			final String[] header = mapReader.getHeader(true);
 			final CellProcessor[] processors = getProcessors();
 
-			Map<String, Object> customerMap;
-			while ((customerMap = mapReader.read(header, processors)) != null) {
-				logger.debug(customerMap);
+			Map<String, Object> attackMap;
+			while ((attackMap = mapReader.read(header, processors)) != null) {
+				handleEntry(attackMap);
 			}
 
 		} finally {
@@ -48,10 +49,30 @@ public class TerroristParser {
 		}
 	}
 
+	private void handleEntry(Map<String, Object> attackMap) {
+		String date = (String) attackMap.get("iday") + "/"+ attackMap.get("imonth")
+				+"/"+ attackMap.get("iyear");
+		String fatalities;
+		if (attackMap.get("nkill") == null)
+			fatalities = "Unknown";
+		else
+			fatalities = (String) attackMap.get("nkill");
+		Attack attack = new Attack((String) attackMap.get("eventid"),
+				fatalities, date);
+		attack.addHasVictim((String) attackMap.get("targtype1_txt"));
+		attack.addHasVictim((String) attackMap.get("targtype2_txt"));
+		attack.addHasVictim((String) attackMap.get("targtype3_txt"));
+		attack.addOfType((String) attackMap.get("attacktype1_txt"));
+		attack.addOfType((String) attackMap.get("attacktype2_txt"));
+		attack.addOfType((String) attackMap.get("attacktype3_txt"));
+		attack.addPerpetrator((String) attackMap.get("gname"));
+		attack.addPerpetrator((String) attackMap.get("gname2"));
+		attack.addPerpetrator((String) attackMap.get("gname3"));
+	}
+
 	private static CellProcessor[] getProcessors() {
 
-		final CellProcessor[] processors = new CellProcessor[] { 
-				new NotNull(), // eventid
+		final CellProcessor[] processors = new CellProcessor[] { new NotNull(), // eventid
 				new Optional(), // iyear
 				new Optional(), // imonth
 				new Optional(), // iday
