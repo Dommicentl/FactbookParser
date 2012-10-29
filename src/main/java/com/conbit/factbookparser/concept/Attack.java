@@ -46,8 +46,13 @@ public class Attack {
 		this.date = date;
 	}
 	
-	public void addHasVictim(String hasVictim){
+	public boolean addHasVictim(String hasVictim){
+		if(hasVictim.isEmpty()){
+			logger.debug("The given victim is empty");
+			return false;
+		}
 		this.hasVictim.add(hasVictim);
+		return true;
 	}
 	
 	public boolean removeHasVictim(String hasVictim){
@@ -59,8 +64,13 @@ public class Attack {
 		return true;
 	}
 	
-	public void addOfType(String ofType){
+	public boolean addOfType(String ofType){
+		if(ofType.isEmpty()){
+			logger.debug("The given type is empty");
+			return false;
+		}
 		this.ofType.add(ofType);
+		return true;
 	}
 	
 	public boolean removeOfType(String ofType){
