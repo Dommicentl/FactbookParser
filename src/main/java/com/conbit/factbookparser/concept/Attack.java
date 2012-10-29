@@ -15,7 +15,7 @@ public class Attack {
 	private String date;
 	private List<String> hasVictim = new ArrayList<String>();
 	private List<String> ofType = new ArrayList<String>();
-	private String perpetrator;
+	private List<String> perpetrators;
 
 	public Attack(long id, int nb_of_fatalities, String date) {
 		this.id = id;
@@ -83,12 +83,22 @@ public class Attack {
 		return true;
 	}
 
-	public String getPerpetrator() {
-		return perpetrator;
+	public boolean addPerpetrator(String perpetrator) {
+		if (perpetrator.isEmpty()) {
+			logger.debug("The given perpetrator is empty");
+			return false;
+		}
+		this.perpetrators.add(perpetrator);
+		return true;
 	}
 
-	public void setPerpetrator(String perpetrator) {
-		this.perpetrator = perpetrator;
+	public boolean removePerpetrator(String perpetrator) {
+		if (!perpetrator.contains(perpetrator)) {
+			logger.error("Can't remove perpetrator because it isn't in the list.");
+			return false;
+		}
+		this.perpetrators.remove(perpetrator);
+		return true;
 	}
 
 }
