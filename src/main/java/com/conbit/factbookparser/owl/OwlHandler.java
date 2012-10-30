@@ -77,7 +77,7 @@ public class OwlHandler {
 //			logger.error("The classname '" + className + "' is not valid!");
 //			return false;
 		}
-		individualName = individualName.replace(" ", "_");
+		individualName = makeSafe(individualName);
 		PrefixManager pm = getCorrectPrefixManager(className);
 		OWLClass owlClass = factory.getOWLClass(":" + className, pm);
 		OWLNamedIndividual individual = factory.getOWLNamedIndividual(":"
@@ -107,8 +107,8 @@ public class OwlHandler {
 	 * @return True if the relation is added, False if not
 	 */
 	public boolean addObjectRelation(String individual1, String relation, String individual2) {
-		individual1 = individual1.replace(" ", "_");
-		individual2 = individual2.replace(" ", "_");
+		individual1 = makeSafe(individual1);
+		individual2 = makeSafe(individual2);
 		if (!isValidIndividual(individual1) || !isValidIndividual(individual2)
 				|| !isValidObjectRelation(relation)) {
 			logger.error("The given arguments are not valid");
@@ -196,6 +196,7 @@ public class OwlHandler {
 	private String makeSafe(String string){
 		string = string.replaceAll(" ", "_");
 		string = string.replaceAll("\"", "");
+		string = string.replaceAll("`", "");
 		return string;
 	}
 
