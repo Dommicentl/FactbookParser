@@ -123,14 +123,9 @@ public class Attack {
 	
 	public void writeObjectRelations(List<String> properties, String objectName, String relation, OwlHandler handler){
 		for(String property: properties){
-			handler.addIndividual(objectName, makeSafe(property));
-			handler.addDataProperty("name", makeSafe(property), property);
-			handler.addObjectRelation(id, relation, makeSafe(property));
+			handler.addIndividual(objectName, property);
+			handler.addDataProperty("name", property, property);
+			handler.addObjectRelation(id, relation, property);
 		}
 	}
-	
-	public String makeSafe(String string){
-		return string.replaceAll(" ", "_");
-	}
-
 }
