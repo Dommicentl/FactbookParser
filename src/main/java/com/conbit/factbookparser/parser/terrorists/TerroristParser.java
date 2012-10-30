@@ -48,6 +48,7 @@ public class TerroristParser {
 			while ((attackMap = mapReader.read(header, processors)) != null) {
 				handleEntry(attackMap);
 			}
+			owlHandler.save();
 
 		} finally {
 			if (mapReader != null) {
