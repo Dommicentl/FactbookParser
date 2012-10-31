@@ -77,7 +77,7 @@ public class OwlHandler {
 //			logger.error("The classname '" + className + "' is not valid!");
 //			return false;
 		}
-		individualName = individualName.replace(" ", "_");
+		individualName = makeSafe(individualName);
 		PrefixManager pm = getCorrectPrefixManager(className);
 		OWLClass owlClass = factory.getOWLClass(":" + className, pm);
 		OWLNamedIndividual individual = factory.getOWLNamedIndividual(":"
@@ -88,7 +88,7 @@ public class OwlHandler {
 		logger.debug("added individual " + individualName + " of class "
 				+ className);
 		// TODO:Save only at the end or at regular intervals
-		return save();
+		return true;
 	}
 
 	/**
@@ -107,8 +107,8 @@ public class OwlHandler {
 	 * @return True if the relation is added, False if not
 	 */
 	public boolean addObjectRelation(String individual1, String relation, String individual2) {
-		individual1 = individual1.replace(" ", "_");
-		individual2 = individual2.replace(" ", "_");
+		individual1 = makeSafe(individual1);
+		individual2 = makeSafe(individual2);
 		if (!isValidIndividual(individual1) || !isValidIndividual(individual2)
 				|| !isValidObjectRelation(relation)) {
 			logger.error("The given arguments are not valid");
@@ -126,7 +126,7 @@ public class OwlHandler {
 		ontManager.addAxiom(ontology, axiom);
 		logger.debug("Added relation \"" + individual1 + " " + relation + " "
 				+ individual2 + "\"");
-		return save();
+		return true;
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class OwlHandler {
 	 * @return | true if added
 	 */
 	public boolean addDataProperty(String property, String individual, String value){
-		individual = individual.replace(" ", "_");
+		individual = makeSafe(individual);
 		if(!isValidIndividual(individual) || !isValidDataProperty(property)){
 			logger.error("The given argument is not valid --> individual=" + individual + " and  property=" + property );
 			return false;
@@ -151,7 +151,7 @@ public class OwlHandler {
 						owlIndividual, value);
 		ontManager.addAxiom(ontology, axiom);
 		logger.debug("Added property \"" + property + " = " + value + " to " + individual + "\"");
-		return save();
+		return true;
 	}
 	
 	private boolean isValidClassName(String className){
@@ -182,7 +182,7 @@ public class OwlHandler {
 			return defaultPm;
 	}
 
-	private boolean save() {
+	public boolean save() {
 		try {
 			ontManager.saveOntology(ontology);
 			return true;
@@ -191,6 +191,13 @@ public class OwlHandler {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	private String makeSafe(String string){
+		string = string.replaceAll(" ", "_");
+		string = string.replaceAll("\"", "");
+		string = string.replaceAll("`", "");
+		return string;
 	}
 
 	private static String location1 = "/media/Data/Documenten/KUL/Master/2ejaar/1e sem/advanced databases/homework2/factbook-ont.owl";

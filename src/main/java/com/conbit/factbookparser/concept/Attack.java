@@ -111,7 +111,21 @@ public class Attack {
 	
 	public boolean writeToOwl(OwlHandler handler){
 		handler.addIndividual("Attack", ""+id);
+		handler.addDataProperty("id", id, id);
+		handler.addDataProperty("numberOfFatalities", id, nb_of_fatalities);
+		handler.addDataProperty("date", id, date);
+		writeObjectRelations(hasVictim, "VictimType", "hasVictim", handler);
+		writeObjectRelations(ofType, "AttackType", "ofType", handler);
+		writeObjectRelations(perpetrators, "Perpetrator", "executedBy", handler);
+		logger.debug("Attack "+id+" written to owl");
 		return true;
 	}
-
+	
+	public void writeObjectRelations(List<String> properties, String objectName, String relation, OwlHandler handler){
+		for(String property: properties){
+			handler.addIndividual(objectName, property);
+			handler.addDataProperty("name", property, property);
+			handler.addObjectRelation(id, relation, property);
+		}
+	}
 }
