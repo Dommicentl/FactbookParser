@@ -389,7 +389,7 @@ public class PropertyConvertor {
 			country.addRelation(r);
 			Property p = new Property(type+country.getIndividualName(), PropertyType.count, value);
 			country.addProperty(p);
-			p = new Property(type+country.getIndividualName(), PropertyType.paved, ""+type.equals("totalAirportsWithPavedRunways"));
+			p = new Property(type+country.getIndividualName(), PropertyType.paved, ""+type.equals("over3,047MAirportsWithPavedRunways"));
 			country.addProperty(p);
 			p = new Property(type+country.getIndividualName(), PropertyType.minRunway, "3047m");
 			country.addProperty(p);
@@ -402,7 +402,7 @@ public class PropertyConvertor {
 			country.addRelation(r);
 			Property p = new Property(type+country.getIndividualName(), PropertyType.count, value);
 			country.addProperty(p);
-			p = new Property(type+country.getIndividualName(), PropertyType.paved, ""+type.equals("totalAirportsWithPavedRunways"));
+			p = new Property(type+country.getIndividualName(), PropertyType.paved, ""+type.equals("2,438To3,047MAirportsWithPavedRunways"));
 			country.addProperty(p);
 			p = new Property(type+country.getIndividualName(), PropertyType.minRunway, "2438m");
 			country.addProperty(p);
@@ -417,7 +417,7 @@ public class PropertyConvertor {
 			country.addRelation(r);
 			Property p = new Property(type+country.getIndividualName(), PropertyType.count, value);
 			country.addProperty(p);
-			p = new Property(type+country.getIndividualName(), PropertyType.paved, ""+type.equals("totalAirportsWithPavedRunways"));
+			p = new Property(type+country.getIndividualName(), PropertyType.paved, ""+type.equals("1,524To2,437MAirportsWithPavedRunways"));
 			country.addProperty(p);
 			p = new Property(type+country.getIndividualName(), PropertyType.minRunway, "1524m");
 			country.addProperty(p);
@@ -432,7 +432,7 @@ public class PropertyConvertor {
 			country.addRelation(r);
 			Property p = new Property(type+country.getIndividualName(), PropertyType.count, value);
 			country.addProperty(p);
-			p = new Property(type+country.getIndividualName(), PropertyType.paved, ""+type.equals("totalAirportsWithPavedRunways"));
+			p = new Property(type+country.getIndividualName(), PropertyType.paved, ""+type.equals("914To1,523MAirportsWithPavedRunways"));
 			country.addProperty(p);
 			p = new Property(type+country.getIndividualName(), PropertyType.minRunway, "914m");
 			country.addProperty(p);
@@ -447,7 +447,7 @@ public class PropertyConvertor {
 			country.addRelation(r);
 			Property p = new Property(type+country.getIndividualName(), PropertyType.count, value);
 			country.addProperty(p);
-			p = new Property(type+country.getIndividualName(), PropertyType.paved, ""+type.equals("totalAirportsWithPavedRunways"));
+			p = new Property(type+country.getIndividualName(), PropertyType.paved, ""+type.equals("under914MAirportsWithPavedRunways"));
 			country.addProperty(p);
 			p = new Property(type+country.getIndividualName(), PropertyType.maxRunway, "914m");
 			country.addProperty(p);
@@ -513,6 +513,42 @@ public class PropertyConvertor {
 					Property p = new Property(port, PropertyType.name, port);
 					country.addProperty(p);
 				}
+			}
+			return true;
+		}
+		if(htmlProperty.getProperty().equals("continent")){
+			String continentName = htmlProperty.getValue();
+			continentName = convertToValid(continentName);
+			if(isValid(continentName)){
+					Relation r = new Relation(country.getIndividualName(), RelationType.liesIn, continentName, "Continent", "Country");
+					country.addRelation(r);
+					Property p = new Property(continentName, PropertyType.name, continentName);
+					country.addProperty(p);
+					r = new Relation(continentName, RelationType.contains, country.getIndividualName(), "Country", "Continent");
+					country.addRelation(r);
+			}
+			return true;
+		}
+		if(htmlProperty.getProperty().equals("borderCountriesLandBoundaries")){
+			//borderCountriesLandBoundaries =  China 76 km, Iran 936 km, Pakistan 2,430 km, Tajikistan 1,206 km, Turkmenistan 744 km, Uzbekistan 137 km
+			String[] countryDistances = htmlProperty.getValue().split(", ");
+			for(String countryDistance : countryDistances){
+				Pattern namePattern = Pattern.compile("[^0-9]*");
+				Matcher m = namePattern.matcher(countryDistance);
+				String countryName = "";
+				if(m.find()) {
+					countryName = m.group(0);
+				}
+				countryName = convertToValid(countryName);
+				String[] distances = countryDistance.split(countryName);
+				String distance = distances[1];
+				distance = convertToValid(distance);
+				Relation r = new Relation(country.getIndividualName(), RelationType.border, country.getIndividualName()+distance+countryName, "Border", "Country");
+				country.addRelation(r);
+				Property p = new Property(country.getIndividualName()+distance+countryName, PropertyType.distance, distance);
+				country.addProperty(p);
+				r = new Relation(country.getIndividualName()+distance+countryName, RelationType.country, countryName, "Country", "Border");
+				country.addRelation(r);
 			}
 			return true;
 		}

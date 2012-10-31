@@ -38,6 +38,7 @@ public class Country {
 		for(Property p : properties){
 			owl.addDataProperty(p.getPropery(), p.getIndividual(), p.getValue());
 		}
+		owl.save();
 		
 	}
 	

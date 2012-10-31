@@ -20,9 +20,18 @@ public class CountryParser {
 		this.countryPage = countryPage;
 		country = new Country(parseCountryName());
 		ArrayList<FilteredProperty> properties = parse();
+		properties.add(new FilteredProperty("continent", getContinent()));
 		PropertyConvertor convertor = new PropertyConvertor(properties, country);
 		convertor.convertToCountry();
 		country.writeToFile();
+	}
+
+	private String getContinent() {
+		Elements continentElement = countryPage.select("div[class=region1]");
+		continentElement = continentElement.select("a");
+		String result = continentElement.text();
+		logger.debug("Continent: "+result);
+		return result;
 	}
 
 	private ArrayList<FilteredProperty> parse(){
@@ -58,8 +67,8 @@ public class CountryParser {
 			else{
 				for(Element subProperty : subProperties){
 					try{
-							filteredProperties.add(new FilteredProperty(toCamelCase(subProperty.text().split(":")[0] + " " +bigBlock.getTitle().text()), subProperty.text().split(":")[1]));
-							logger.debug("Found property: " + toCamelCase(subProperty.text().split(":")[0] + " " +bigBlock.getTitle().text()) + " = " + subProperty.text().split(":")[1]);
+						filteredProperties.add(new FilteredProperty(toCamelCase(subProperty.text().split(":")[0] + " " +bigBlock.getTitle().text()), subProperty.text().split(":")[1]));
+						logger.debug("Found property: " + toCamelCase(subProperty.text().split(":")[0] + " " +bigBlock.getTitle().text()) + " = " + subProperty.text().split(":")[1]);
 					} catch (Exception e){
 						logger.error("No value found for: " + subProperty.text().split(":")[0]);
 					}
