@@ -27,10 +27,7 @@ public class Country {
 		} catch (OWLOntologyCreationException e) {
 			e.printStackTrace();
 		}
-		owl.addIndividual("Country", individualName);		
-		for(Property p : properties){
-			owl.addDataProperty(p.getPropery(), this.individualName, p.getValue());
-		}
+		owl.addIndividual("Country", individualName);	
 		for(Relation r : relations){
 			if(! owl.addObjectRelation(r.getFirst(), r.getRelation(), r.getSecond())){
 				owl.addIndividual(r.getDomainClass(), r.getFirst());
@@ -38,6 +35,10 @@ public class Country {
 				owl.addObjectRelation(r.getFirst(), r.getRelation(), r.getSecond());
 			}
 		}
+		for(Property p : properties){
+			owl.addDataProperty(p.getPropery(), p.getIndividual(), p.getValue());
+		}
+		
 	}
 	
 	public void addRelation(Relation r){

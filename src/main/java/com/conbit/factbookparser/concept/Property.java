@@ -19,6 +19,10 @@ public class Property {
 	public String getValue(){
 		return value;
 	}
+
+	public String getIndividual() {
+		return individual;
+	}
 	
 	
 
