@@ -41,6 +41,9 @@ public class PropertyConvertor {
 
 	private boolean setRelation(FilteredProperty htmlProperty) {
 		htmlProperty.renameValue(takeRightValuePart(htmlProperty.getValue()));
+		if(country.getIndividualName().equals("South Sudan") || country.getIndividualName().equals("South_Sudan")){
+			System.out.println("ok");
+		}
 		if(htmlProperty.getProperty().equals("naturalResources")){
 			String[] resources = htmlProperty.getValue().split(", ");
 			for(String resource : resources){
@@ -290,6 +293,8 @@ public class PropertyConvertor {
 		}	
 		if(htmlProperty.getProperty().equals("highestPointElevationExtremes")){
 			String point = htmlProperty.getValue();
+			if(point.contains("NA"))
+				return true;
 			point = convertToValid(point);
 			Pattern namePattern = Pattern.compile("[^0-9]*");
 			Matcher m = namePattern.matcher(point);
@@ -311,6 +316,8 @@ public class PropertyConvertor {
 		}	
 		if(htmlProperty.getProperty().equals("lowestPointElevationExtremes")){
 			String point = htmlProperty.getValue();
+			if(point.contains("NA"))
+				return true;
 			point = convertToValid(point);
 			Pattern namePattern = Pattern.compile("[^0-9]*");
 			Matcher m = namePattern.matcher(point);
@@ -554,6 +561,7 @@ public class PropertyConvertor {
 			String[] countryDistances = value.split(", ");
 			for(String countryDistance : countryDistances){
 				countryDistance = countryDistance.replaceAll("\\(.*?\\)", "");
+				countryDistance = convertToValid(countryDistance);
 				Pattern namePattern = Pattern.compile("[^0-9]*");
 				Matcher m = namePattern.matcher(countryDistance);
 				String countryName = "";

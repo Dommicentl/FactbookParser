@@ -87,10 +87,8 @@ public class OwlHandler {
 		logger.debug("added individual " + individualName + " of class "
 				+ className);
 		// TODO:Save only at the end or at regular intervals
-		if( ! save() ){
-			logger.fatal("Could not save: " + individualName + " of " + className);
-		}
-		return save();
+
+		return true;
 	}
 
 	/**
@@ -128,10 +126,7 @@ public class OwlHandler {
 		ontManager.addAxiom(ontology, axiom);
 		logger.debug("Added relation \"" + individual1 + " " + relation + " "
 				+ individual2 + "\"");
-		if( ! save() ){
-			logger.fatal("Could not save: " + individual1 + " " + relation + " " +individual2);
-		}
-		return save();
+		return true;
 	}
 
 	/**
@@ -157,10 +152,7 @@ public class OwlHandler {
 		ontManager.addAxiom(ontology, axiom);
 		logger.debug("Added property \"" + property + " = " + value + " to " + individual + "\"");
 		
-		if(! save() ){
-			logger.fatal("Could not save: " + individual + " " + property + " " +value);
-		}
-		return save();
+		return true;
 	}
 	
 	private boolean isValidClassName(String className){
