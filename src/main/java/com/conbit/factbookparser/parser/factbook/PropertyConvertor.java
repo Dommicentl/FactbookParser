@@ -40,6 +40,7 @@ public class PropertyConvertor {
 	}
 
 	private boolean setRelation(FilteredProperty htmlProperty) {
+		htmlProperty.renameValue(takeRightValuePart(htmlProperty.getValue()));
 		if(htmlProperty.getProperty().equals("naturalResources")){
 			String[] resources = htmlProperty.getValue().split(", ");
 			for(String resource : resources){
@@ -52,11 +53,17 @@ public class PropertyConvertor {
 			return true;
 		}
 		if(htmlProperty.getProperty().equals("ethnicGroups")){
-			String[] ethnics = htmlProperty.getValue().split(", ");
+			String value = htmlProperty.getValue().replaceAll("\\((.*?)\\)", "");
+			String[] ethnics = value.split(", ");
 			for(String ethnic : ethnics){
 				String[] parts = ethnic.split(" ");
 				String name = convertToValid(parts[0]);
-				String percent = convertToValid(parts[1]);
+				String percent = "";
+				try{
+					percent = convertToValid(parts[1]);
+				} catch (Exception e){
+					break;
+				}
 				String individualName = convertToValid(ethnic);
 				Relation r = new Relation(individualName, RelationType.ethnicGroup, name, "EthnicGroup", "EthnicGroupPercent");
 				country.addRelation(r);
@@ -250,8 +257,10 @@ public class PropertyConvertor {
 			return true;
 		}	
 		if(htmlProperty.getProperty().equals("religions")){
-			String[] religions = htmlProperty.getValue().split(", ");
+			String value = takeRightValuePart(htmlProperty.getValue());
+			String[] religions = value.split(", ");
 			for(String religion : religions){
+				religion = convertToValid(religion);
 				Pattern namePattern = Pattern.compile("[^0-9]*");
 				Matcher m = namePattern.matcher(religion);
 				String religionName = "";
@@ -260,7 +269,12 @@ public class PropertyConvertor {
 				}
 				religionName = convertToValid(religionName);
 				String[] percentages = religion.split(religionName);
-				String percentage = percentages[1];
+				String percentage = "";
+				try{
+					percentage = percentages[1];
+				} catch (Exception e){
+					return true;
+				}
 				String individualName = convertToValid(religion);
 				Relation r = new Relation(individualName, RelationType.religion, religionName, "Religion", "ReligionPercent");
 				country.addRelation(r);
@@ -319,66 +333,66 @@ public class PropertyConvertor {
 		if(htmlProperty.getProperty().equals("atBirthSexRatio")){
 			String[] parts = convertToValid(htmlProperty.getValue()).split(" male(s)/female");
 			String ratio = parts[0];
-			Relation r = new Relation(country.getIndividualName(), RelationType.sexRatio, "atBirthSexRatio_"+country.getIndividualName(), "SexRatioBreakdown", "Country");
+			Relation r = new Relation(country.getIndividualName(), RelationType.sexRatio, "atBirthSexRatio_"+ratio, "SexRatioBreakdown", "Country");
 			country.addRelation(r);
-			Property p = new Property("atBirthSexRatio_"+country.getIndividualName(), PropertyType.ratio, ratio);
+			Property p = new Property("atBirthSexRatio_"+ratio, PropertyType.ratio, ratio);
 			country.addProperty(p);
-			p = new Property("atBirthSexRatio_"+country.getIndividualName(), PropertyType.maxAge, "0");
+			p = new Property("atBirthSexRatio_"+ratio, PropertyType.maxAge, "0");
 			country.addProperty(p);
 			return true;
 		}
 		if(htmlProperty.getProperty().equals("under15YearsSexRatio")){
 			String[] parts = convertToValid(htmlProperty.getValue()).split(" male(s)/female");
 			String ratio = parts[0];
-			Relation r = new Relation(country.getIndividualName(), RelationType.sexRatio, "under15YearsSexRatio"+country.getIndividualName(), "SexRatioBreakdown", "Country");
+			Relation r = new Relation(country.getIndividualName(), RelationType.sexRatio, "under15YearsSexRatio_"+ratio, "SexRatioBreakdown", "Country");
 			country.addRelation(r);
-			Property p = new Property("under15YearsSexRatio"+country.getIndividualName(), PropertyType.ratio, ratio);
+			Property p = new Property("under15YearsSexRatio_"+ratio, PropertyType.ratio, ratio);
 			country.addProperty(p);
-			p = new Property("under15YearsSexRatio"+country.getIndividualName(), PropertyType.maxAge, "15");
+			p = new Property("under15YearsSexRatio_"+ratio, PropertyType.maxAge, "15");
 			country.addProperty(p);
 			return true;
 		}
 		if(htmlProperty.getProperty().equals("1564YearsSexRatio")){
 			String[] parts = convertToValid(htmlProperty.getValue()).split(" male(s)/female");
 			String ratio = parts[0];
-			Relation r = new Relation(country.getIndividualName(), RelationType.sexRatio, "1564YearsSexRatio"+country.getIndividualName(), "SexRatioBreakdown", "Country");
+			Relation r = new Relation(country.getIndividualName(), RelationType.sexRatio, "1564YearsSexRatio_"+ratio, "SexRatioBreakdown", "Country");
 			country.addRelation(r);
-			Property p = new Property("1564YearsSexRatio"+country.getIndividualName(), PropertyType.ratio, ratio);
+			Property p = new Property("1564YearsSexRatio_"+ratio, PropertyType.ratio, ratio);
 			country.addProperty(p);
-			p = new Property("1564YearsSexRatio"+country.getIndividualName(), PropertyType.maxAge, "64");
+			p = new Property("1564YearsSexRatio_"+ratio, PropertyType.maxAge, "64");
 			country.addProperty(p);
-			p = new Property("1564YearsSexRatio"+country.getIndividualName(), PropertyType.minAge, "15");
+			p = new Property("1564YearsSexRatio_"+ratio, PropertyType.minAge, "15");
 			country.addProperty(p);
 			return true;
 		}
 		if(htmlProperty.getProperty().equals("65YearsAndOverSexRatio")){
 			String[] parts = convertToValid(htmlProperty.getValue()).split(" male(s)/female");
 			String ratio = parts[0];
-			Relation r = new Relation(country.getIndividualName(), RelationType.sexRatio, "65YearsAndOverSexRatio"+country.getIndividualName(), "SexRatioBreakdown", "Country");
+			Relation r = new Relation(country.getIndividualName(), RelationType.sexRatio, "65YearsAndOverSexRatio_"+ratio, "SexRatioBreakdown", "Country");
 			country.addRelation(r);
-			Property p = new Property("65YearsAndOverSexRatio"+country.getIndividualName(), PropertyType.ratio, ratio);
+			Property p = new Property("65YearsAndOverSexRatio_"+ratio, PropertyType.ratio, ratio);
 			country.addProperty(p);
-			p = new Property("65YearsAndOverSexRatio"+country.getIndividualName(), PropertyType.minAge, "65");
+			p = new Property("65YearsAndOverSexRatio_"+ratio, PropertyType.minAge, "65");
 			country.addProperty(p);
 			return true;
 		}
 		if(htmlProperty.getProperty().equals("totalPopulationSexRatio")){
 			String[] parts = convertToValid(htmlProperty.getValue()).split(" male(s)/female");
 			String ratio = parts[0];
-			Relation r = new Relation(country.getIndividualName(), RelationType.sexRatio, "totalPopulationSexRatio"+country.getIndividualName(), "SexRatioBreakdown", "Country");
+			Relation r = new Relation(country.getIndividualName(), RelationType.sexRatio, "totalPopulationSexRatio_"+ratio, "SexRatioBreakdown", "Country");
 			country.addRelation(r);
-			Property p = new Property("totalPopulationSexRatio"+country.getIndividualName(), PropertyType.ratio, ratio);
+			Property p = new Property("totalPopulationSexRatio_"+ratio, PropertyType.ratio, ratio);
 			country.addProperty(p);
 			return true;
 		}
 		if(htmlProperty.getProperty().equals("totalAirportsWithPavedRunways") || htmlProperty.getProperty().equals("totalAirportsWithUnpavedRunways")){
 			String type = htmlProperty.getProperty();
 			String value = convertToValid(htmlProperty.getValue());
-			Relation r = new Relation(country.getIndividualName(), RelationType.airportBreakdown, type+country.getIndividualName(), "AirportBreakdown", "Country");
+			Relation r = new Relation(country.getIndividualName(), RelationType.airportBreakdown, type+value, "AirportBreakdown", "Country");
 			country.addRelation(r);
-			Property p = new Property(type+country.getIndividualName(), PropertyType.count, value);
+			Property p = new Property(type+value, PropertyType.count, value);
 			country.addProperty(p);
-			p = new Property(type+country.getIndividualName(), PropertyType.paved, ""+type.equals("totalAirportsWithPavedRunways"));
+			p = new Property(type+value, PropertyType.paved, ""+type.equals("totalAirportsWithPavedRunways"));
 			country.addProperty(p);
 			return true;
 		}
@@ -455,7 +469,8 @@ public class PropertyConvertor {
 		}
 		if(htmlProperty.getProperty().equals("agricultureLaborForceByOccupation")){
 			//agricultureLaborForceByOccupation =  78.6%
-			String value = convertToValid(htmlProperty.getValue());
+			String value = takeRightValuePart(htmlProperty.getValue());
+			value = convertToValid(value);
 			Relation r = new Relation(country.getIndividualName(), RelationType.occupation, "agriculture_"+value, "OccupationPercent", "Country");
 			country.addRelation(r);
 			r = new Relation("agriculture_"+value, RelationType.occupation, "Agriculture", "Occupation", "OccupationPercent");
@@ -467,7 +482,8 @@ public class PropertyConvertor {
 			return true;
 		}	
 		if(htmlProperty.getProperty().equals("industryLaborForceByOccupation")){
-			String value = convertToValid(htmlProperty.getValue());
+			String value = takeRightValuePart(htmlProperty.getValue());
+			value = convertToValid(value);
 			Relation r = new Relation(country.getIndividualName(), RelationType.occupation, "industry"+value, "OccupationPercent", "Country");
 			country.addRelation(r);
 			r = new Relation("industry"+value, RelationType.occupation, "Industry", "Occupation", "OccupationPercent");
@@ -479,7 +495,8 @@ public class PropertyConvertor {
 			return true;
 		}	
 		if(htmlProperty.getProperty().equals("servicesLaborForceByOccupation")){
-			String value = convertToValid(htmlProperty.getValue());
+			String value = takeRightValuePart(htmlProperty.getValue());
+			value = convertToValid(value);
 			Relation r = new Relation(country.getIndividualName(), RelationType.occupation, "services"+value, "OccupationPercent", "Country");
 			country.addRelation(r);
 			r = new Relation("services"+value, RelationType.occupation, "Services", "Occupation", "OccupationPercent");
@@ -491,7 +508,8 @@ public class PropertyConvertor {
 			return true;
 		}	
 		if(htmlProperty.getProperty().equals("internationalOrganizationParticipation")){
-			String[] organizations = htmlProperty.getValue().split(", ");
+			String value = takeRightValuePart(htmlProperty.getValue());
+			String[] organizations = value.split(", ");
 			for(String organization : organizations){
 				organization = convertToValid(organization);
 				if(isValid(organization)){
@@ -504,7 +522,8 @@ public class PropertyConvertor {
 			return true;
 		}
 		if(htmlProperty.getProperty().equals("portsAndTerminals")){
-			String[] ports = htmlProperty.getValue().split(", ");
+			String value = takeRightValuePart(htmlProperty.getValue());
+			String[] ports = value.split(", ");
 			for(String port : ports){
 				port = convertToValid(port);
 				if(isValid(port)){
@@ -517,7 +536,7 @@ public class PropertyConvertor {
 			return true;
 		}
 		if(htmlProperty.getProperty().equals("continent")){
-			String continentName = htmlProperty.getValue();
+			String continentName = takeRightValuePart(htmlProperty.getValue());
 			continentName = convertToValid(continentName);
 			if(isValid(continentName)){
 					Relation r = new Relation(country.getIndividualName(), RelationType.liesIn, continentName, "Continent", "Country");
@@ -530,9 +549,11 @@ public class PropertyConvertor {
 			return true;
 		}
 		if(htmlProperty.getProperty().equals("borderCountriesLandBoundaries")){
+			String value = takeRightValuePart(htmlProperty.getValue());
 			//borderCountriesLandBoundaries =  China 76 km, Iran 936 km, Pakistan 2,430 km, Tajikistan 1,206 km, Turkmenistan 744 km, Uzbekistan 137 km
-			String[] countryDistances = htmlProperty.getValue().split(", ");
+			String[] countryDistances = value.split(", ");
 			for(String countryDistance : countryDistances){
+				countryDistance = countryDistance.replaceAll("\\(.*?\\)", "");
 				Pattern namePattern = Pattern.compile("[^0-9]*");
 				Matcher m = namePattern.matcher(countryDistance);
 				String countryName = "";
@@ -557,6 +578,12 @@ public class PropertyConvertor {
 		return false;
 		
 		
+	}
+
+	public String takeRightValuePart(String value) {
+		String[] parts = value.split("note");
+		value = parts[0];
+		return value;
 	}
 
 	private boolean setProperty(FilteredProperty htmlProperty) {
@@ -689,6 +716,8 @@ public class PropertyConvertor {
 	}
 
 	private String convertToValid(String name){
+		if(name.equals(" ") || name.equals(""))
+			return "";
 		name = name.replace(",","");
 		name = name.replace(")","");
 		name = name.replace("(","");

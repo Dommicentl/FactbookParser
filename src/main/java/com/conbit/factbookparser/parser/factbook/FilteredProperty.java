@@ -27,4 +27,8 @@ public class FilteredProperty {
 		property = newName;
 	}
 	
+	public void renameValue(String value){
+		this.value = value;
+	}
+	
 }

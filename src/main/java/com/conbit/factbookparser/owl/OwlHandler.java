@@ -57,9 +57,8 @@ public class OwlHandler {
 		PrefixManager pm = new DefaultPrefixManager(
 				"http://www.daml.org/2001/09/countries/fips-10-4-ont#");
 		classIriMapper.put("Country", pm);
-		pm = new DefaultPrefixManager(
-				"http://www.daml.org/2001/09/countries/fips-10-4-ont#");
 		classIriMapper.put("code", pm);
+		classIriMapper.put("name",pm);
 	}
 
 	/**
@@ -88,7 +87,10 @@ public class OwlHandler {
 		logger.debug("added individual " + individualName + " of class "
 				+ className);
 		// TODO:Save only at the end or at regular intervals
-		return true;
+		if( ! save() ){
+			logger.fatal("Could not save: " + individualName + " of " + className);
+		}
+		return save();
 	}
 
 	/**
@@ -119,14 +121,17 @@ public class OwlHandler {
 		OWLNamedIndividual owlIndividual2 = factory.getOWLNamedIndividual(":"
 				+ individual2, defaultPm);
 		OWLObjectProperty owlObjectProperty = factory.getOWLObjectProperty(":"
-				+ relation, defaultPm);
+				+ relation, getCorrectPrefixManager(relation));
 		OWLObjectPropertyAssertionAxiom axiom = factory
 				.getOWLObjectPropertyAssertionAxiom(owlObjectProperty,
 						owlIndividual1, owlIndividual2);
 		ontManager.addAxiom(ontology, axiom);
 		logger.debug("Added relation \"" + individual1 + " " + relation + " "
 				+ individual2 + "\"");
-		return true;
+		if( ! save() ){
+			logger.fatal("Could not save: " + individual1 + " " + relation + " " +individual2);
+		}
+		return save();
 	}
 
 	/**
@@ -151,7 +156,11 @@ public class OwlHandler {
 						owlIndividual, value);
 		ontManager.addAxiom(ontology, axiom);
 		logger.debug("Added property \"" + property + " = " + value + " to " + individual + "\"");
-		return true;
+		
+		if(! save() ){
+			logger.fatal("Could not save: " + individual + " " + property + " " +value);
+		}
+		return save();
 	}
 	
 	private boolean isValidClassName(String className){
@@ -166,7 +175,7 @@ public class OwlHandler {
 	}
 
 	private boolean isValidObjectRelation(String objectRelation) {
-		IRI iri = IRI.create(defaultPm.getDefaultPrefix() + objectRelation);
+		IRI iri = IRI.create(getCorrectPrefixManager(objectRelation).getDefaultPrefix() + objectRelation);
 		return ontology.containsObjectPropertyInSignature(iri);
 	}
 
@@ -186,8 +195,8 @@ public class OwlHandler {
 		try {
 			ontManager.saveOntology(ontology);
 			return true;
-		} catch (OWLOntologyStorageException e) {
-			logger.error("Could not save the ontology!");
+		} catch (Exception e) {
+			logger.debug("Could not save the ontology!");
 			e.printStackTrace();
 			return false;
 		}
@@ -200,7 +209,7 @@ public class OwlHandler {
 		return string;
 	}
 
-	private static String location1 = "/media/Data/Documenten/KUL/Master/2ejaar/1e sem/advanced databases/homework2/factbook-ont.owl";
+	private static String location1 = "/media/jorn/Data/Documenten/KUL/Master/2ejaar/1e sem/advanced databases/homework2/factbook-ont.owl";
 	private static String location2 = "/home/leendert/factbook-ont.owl";
 
 	public static void main(String[] args)  {
