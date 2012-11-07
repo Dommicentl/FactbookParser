@@ -76,6 +76,7 @@ public class TerroristParser {
 		attack.addPerpetrator((String) attackMap.get("gname"));
 		attack.addPerpetrator((String) attackMap.get("gname2"));
 		attack.addPerpetrator((String) attackMap.get("gname3"));
+		attack.setCountry((String) attackMap.get("country_txt"));
 		attack.writeToOwl(owlHandler);
 	}
 
