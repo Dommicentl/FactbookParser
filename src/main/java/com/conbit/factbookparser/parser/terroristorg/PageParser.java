@@ -23,7 +23,7 @@ public class PageParser {
 	}
 	
 	public void parse() throws IOException{
-		String owlLocation = "/home/jorn/Desktop/adb_new/emptyhomework2.owl";
+		String owlLocation = "/home/leendert/Total.owl";
 		OwlHandler owl = null;
 		try {
 			owl = new OwlHandler(owlLocation);
@@ -46,6 +46,8 @@ public class PageParser {
 		logger.debug("Created: " + org.getName());
 		ArrayList<String> classificationList = getClassification(countryPage);
 		org.setClassificiation(classificationList);
+		ArrayList<String> basesList = getBases(countryPage);
+		org.setBases(basesList);
 		for(String classif : org.getClassifications()){
 			logger.debug("with classification: " + classif);
 		}
@@ -68,6 +70,17 @@ public class PageParser {
 			}
 		}
 		return classificationList;
+	}
+	
+	private ArrayList<String> getBases(Document countryPage){
+		ArrayList<String> result = new ArrayList<String>();
+		Elements elements = countryPage.select("a[href^=terrorist_organizations_by_country.asp?id=]");
+		for(Element current: elements){
+			String country = current.text();
+			logger.debug("With base: "+country);
+			result.add(country);
+		}
+		return result;
 	}
 
 	public static void main(String[] args) throws IOException {

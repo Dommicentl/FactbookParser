@@ -11,6 +11,7 @@ public class TerroristOrg {
 	
 	private String name;
 	private ArrayList<String> classifications = new ArrayList<String>();
+	private ArrayList<String> bases = new ArrayList<String>();
 
 	public void setName(String name) {
 		this.name = name;
@@ -28,17 +29,34 @@ public class TerroristOrg {
 		return classifications;
 	}
 	
+	public ArrayList<String> getBases() {
+		return bases;
+	}
+
+	public void setBases(ArrayList<String> bases) {
+		this.bases = bases;
+	}
+
 	public void writeToFile(OwlHandler owl){
 
 		owl.addIndividual("Perpetrator", name);	
+		owl.addDataProperty("name", name, name);
 		
 		//adding classificationrelation
 		for(String classification : classifications){
 			if(! owl.addObjectRelation(name, "hasClassification", classification)){
-				owl.addIndividual("Perpetrator", name);
 				owl.addIndividual("Classification", classification);
 				owl.addDataProperty("name", classification, classification);
 				owl.addObjectRelation(name, "hasClassification", classification);
+			}
+		}
+		
+		//adding bases
+		for(String base : bases){
+			if(! owl.addObjectRelation(name, "hasBaseOfOperation", base)){
+				owl.addIndividual("Country", base);
+				owl.addDataProperty("name", base, base);
+				owl.addObjectRelation(name, "hasBaseOfOperation", base);
 			}
 		}
 		
