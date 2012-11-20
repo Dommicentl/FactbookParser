@@ -20,7 +20,7 @@ public class Country {
 	
 	public void writeToFile(){
 		//TODO: uncomment
-		String owlLocation = "/media/jorn/Data/Documenten/KUL/Master/2ejaar/1e sem/advanced databases/homework2/factbook-ont.owl";
+		String owlLocation = "/home/jorn/Desktop/adb_new/factbook-ont.owl";
 		OwlHandler owl = null;
 		try {
 			owl = new OwlHandler(owlLocation);

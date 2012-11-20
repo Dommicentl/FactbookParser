@@ -11,7 +11,7 @@
 \begin{document}
 \maketitle
 \section{Merging the ontologies}
-The merging of the ontologies was done manually. Our own ontology was quite small so doing it manually seemed the best and fasted solution. In figure \ref{fig:ontology} you can find the EER diagram of our ontology from the previous assignment. Now follow the steps which we followed to merge the ontology in chronological order.
+The merging of the ontologies was done manually. Our own ontology was quite small so doing it manually seemed the best and fasted solution. In figure 1 you can find the EER diagram of our ontology from the previous assignment. Now follow the steps which we followed to merge the ontology in chronological order.
 \begin{itemize}
 \item We started by taking the given factbook ontology.
 \item Next we added our versions of \textit{Country} and \textit{Government type} and added all the declarations of the corresponding classes in the factbook ontology to this two classes. We also changed the declaration of our \textit{Name} property from equivalent class to superclass, because this is a shared variable who is used by many classes. This was an error in our previous ontology. We ofcourse deleted the original \textit{Country} and \textit{Government type} classes afterwards.
@@ -32,7 +32,7 @@ The resulting ontology is the ontology we populated.
 \label{fig:ontology}
 \end{figure}
 \section{Automate the population}
-To populate the ontologies we had to use some kind of automation because the dataset was too large to do it manually. In subsection \ref{sec:factbook} we describe how we parsed the html pages of the CIA Factbook. In subsection \ref{sec:terrorist_db} we describe how we parsed the csv file of the Terrorist Attack database. Finally in subsection \ref{sec:writ_owl} we explain how we managed to get all this data in the existing OWL ontology.
+To populate the ontologies we had to use some kind of automation because the dataset was too large to do it manually. In subsection 2.1 we describe how we parsed the html pages of the CIA Factbook. In subsection 2.2 we describe how we parsed the csv file of the Terrorist Attack database. Finally in subsection 2.3 we explain how we managed to get all this data in the existing OWL ontology.
 \subsection{Parsing the CIA Factbook}
 \label{sec:factbook}
 Because the factbook is a website and the content is only available in html we had to parse the html.
