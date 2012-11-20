@@ -14,6 +14,7 @@ public class Attack {
 	private String id;
 	private String nb_of_fatalities;
 	private String date;
+	private String country;
 	private List<String> hasVictim = new ArrayList<String>();
 	private List<String> ofType = new ArrayList<String>();
 	private List<String> perpetrators = new ArrayList<String>();
@@ -111,12 +112,15 @@ public class Attack {
 	
 	public boolean writeToOwl(OwlHandler handler){
 		handler.addIndividual("Attack", ""+id);
+		handler.addIndividual("Country", country);
+		handler.addDataProperty("name", country, country);
 		handler.addDataProperty("id", id, id);
 		handler.addDataProperty("numberOfFatalities", id, nb_of_fatalities);
 		handler.addDataProperty("date", id, date);
 		writeObjectRelations(hasVictim, "VictimType", "hasVictim", handler);
 		writeObjectRelations(ofType, "AttackType", "ofType", handler);
 		writeObjectRelations(perpetrators, "Perpetrator", "executedBy", handler);
+		handler.addObjectRelation(""+id, "occured", country);
 		logger.debug("Attack "+id+" written to owl");
 		return true;
 	}
@@ -128,4 +132,14 @@ public class Attack {
 			handler.addObjectRelation(id, relation, property);
 		}
 	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	
+	
 }
