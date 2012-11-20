@@ -41,7 +41,9 @@ public class ListParser {
 	public static void main(String[] args) {
 		ListParser parser = new ListParser();
 		try {
-			parser.getOrganisationLinks();
+			ArrayList<String> list = parser.getOrganisationLinks();
+			PageParser pageParser = new PageParser(list);
+			pageParser.parse();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

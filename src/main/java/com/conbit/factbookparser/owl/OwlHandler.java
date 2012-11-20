@@ -109,8 +109,8 @@ public class OwlHandler {
 	public boolean addObjectRelation(String individual1, String relation, String individual2) {
 		individual1 = makeSafe(individual1);
 		individual2 = makeSafe(individual2);
-		if (!isValidIndividual(individual1) || !isValidIndividual(individual2)
-				|| !isValidObjectRelation(relation)) {
+		if (!isValidIndividual(individual1) || !isValidIndividual(individual2)){
+			//	|| !isValidObjectRelation(relation)) {
 			logger.error("The given arguments are not valid");
 			return false;
 		}
