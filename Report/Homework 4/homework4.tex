@@ -1,0 +1,79 @@
+\documentclass[a4]{article}
+\usepackage{fullpage}
+\usepackage{biblatex}
+\usepackage{listings}
+\bibliography{refs.bib}
+\title{Advanced Databases: Homework 4  (Draft)}
+\author{Leendert Dommicent and Jorn Van Loock}
+\begin{document}
+\maketitle
+\setlength{\parskip}{5pt}
+\setlength{\parindent}{0pt}
+\section{Converting the xml file}
+We first had to convert the xml file to an arff file. This is necessary because Weka doesn't read xml files. We decided that the easiest and fastest way to to this, is by writing a small Java program. This program will parse the xml file, simplify the data and write it to the arff file.
+\subsection{Parsing the xml file}
+For the parsing of the xml file we use a standard Java library. This library can parse the xml file to a DOM tree. We can than navigate in the DOM tree to get the necessary data.
+\subsection{Simplifying the data}
+The xml file we received for this homework contained a lot of unnecessary information. The only thing we had to know for this assignment was if the person was male, female or a child and if they survived. All the other data isn't relevant.\par
+Our Java parser gets the following data for every person on the titanic: gender, age and boat number. If the age is higher than eighteen than we give the person as a type his gender, when the person is below eighteen the type becomes \textit{Child}. For every person the Java parser then tries to find a lifeboat number. If there is one the person survived if not he died.\par
+All this data is saved in the program ready to be written to an arff file.
+\subsection{Writing to a arff file}
+So we have people as instances. They have two features: type and survived. This is all the necessary information we need. We translated this in an arff file heading like this:
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}
+@Relation titanic
+@ATTRIBUTE type {Male,Female,Child}
+@ATTRIBUTE survived {true,false}
+@DATA
+\end{lstlisting}
+\end{tabular}
+\end{center}
+This heading just tells us that we have a feature type which can contain the values \textit{Male}, \textit{Female} and \textit{Child}. We also have a feature survived which can hold the value true or false.\par
+After this \textit{@Data} entry the data of all the individuals follows in the following format:
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}
+Female,true
+Male,false
+\end{lstlisting}
+\end{tabular}
+\end{center}
+To write this to an actual .arff file we just use standard Java IO libraries to write the data to the file line by line.
+\subsection{Result}
+Again you can find the resulting code in our GitHub repository\cite{githubproject} under the name \textit{XMLtoARFF} in the package \textit{com.conbit.factbookparser.convertors}.
+\section{Data mining with Weka}
+In this section we explain which algorithms we ran on the data we had and what the results were.
+\subsection{RJ45}
+We first decided to try to construct a decision tree with RJ45. With this tree we can maybe find some trend that helps us answer the question of the homework. This is the RJ45 output tree:
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}
+J48 pruned tree
+------------------
+
+type = Male: false (1505.0/312.0)
+type = Female: true (329.0/90.0)
+type = Child: false (408.0/188.0)
+\end{lstlisting}
+\end{tabular}
+\end{center}
+This is quite an interesting result. If the person is a child the classifier classify the child as dead. In $54\%$ of the cases this is even correct. The rule "women and children first" can however still have been applied because also for the male adults the classification is dead. However we see that for $21\%$ this isn't true. So $21\%$ percent of the male adults were saved when only $46\%$ of the children was saved. In absolute numbers is are 312 adult man saved against 188 children.\par
+This our numbers with which we can hardly defence that the rule "women and children" first. To much men were saved against too little children.
+\subsection{Apriori}
+We wanted to have a second opinion and decided to use Apriori to generate rules. Only rules with a confidence above 0.7 were generated. This is the result:
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}
+ 1. survived=false 1503 ==> type=Male 1193    conf:(0.79)
+ 2. type=Male 1505 ==> survived=false 1193    conf:(0.79)
+ 3. type=Female 329 ==> survived=true 239    conf:(0.73)
+\end{lstlisting}
+\end{tabular}
+\end{center}
+The first rule seems to defend the rule "women and children first". The rule that if you didn't survived you are a men has a high confidence. However the most likely culprit for this is that there were a lot more adult men on the titanic than women or children. So it's evident that a lot more died. The second rule also says that if you were male you died with a confidence of 0.79. Apriori however couldn't deduce rules for the children with high confidence. So with only the resulting data from Apriori it's hard to determine if the rule was followed. If we only take the adult man and woman into account we can conclude that women were saved before men because of rule two and three. This last rule says that if you were an adult woman you were saved with a confidence of 0.73. But this says nothing about the children.
+\section{The real world}
+It doesn't seem that the rule "women and children first" was carefully followed. However the data we had was very limited. We didn't know the order with which the lifeboats were let in the water. Maybe all de adult man that survived were on the boats that returned after the sinking of the titanic to help people. It's easy to assume that adult men could stay alive longer in the cold water than children.\par
+So to be ably to really decide if the rule was followed we need more data of the lifeboats. Also which persons already died on board the ship due to for example the flooding will maybe help to make a more certain decision.
+\printbibliography
+\end{document}
