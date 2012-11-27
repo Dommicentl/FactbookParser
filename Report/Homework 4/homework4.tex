@@ -10,12 +10,12 @@
 \setlength{\parskip}{5pt}
 \setlength{\parindent}{0pt}
 \section{Converting the xml file}
-We first had to convert the xml file to an arff file. This is necessary because Weka doesn't read xml files. We decided that the easiest and fastest way to to this, is by writing a small Java program. This program will parse the xml file, simplify the data and write it to the arff file.
+We first had to convert the xml file to an arff file. This is necessary because Weka doesn't read xml files. We decided that the easiest and fastest way to do this, is by writing a small Java program. This program will parse the xml file, simplify the data and write it to the arff file.
 \subsection{Parsing the xml file}
 For the parsing of the xml file we use a standard Java library. This library can parse the xml file to a DOM tree. We can than navigate in the DOM tree to get the necessary data.
 \subsection{Simplifying the data}
 The xml file we received for this homework contained a lot of unnecessary information. The only thing we had to know for this assignment was if the person was male, female or a child and if they survived. All the other data isn't relevant.\par
-Our Java parser gets the following data for every person on the titanic: gender, age and boat number. If the age is higher than eighteen than we give the person as a type his gender, when the person is below eighteen the type becomes \textit{Child}. For every person the Java parser then tries to find a lifeboat number. If there is one the person survived if not he died.\par
+Our Java parser gets the following data for every person on the titanic: gender, age and boat number. If the age is higher than eighteen than we give the person as a type his gender, when the person is below eighteen the type becomes \textit{Child}. For every person the Java parser then tries to find a lifeboat number. If there is one the person survived, if not he died.\par
 All this data is saved in the program ready to be written to an arff file.
 \subsection{Writing to a arff file}
 So we have people as instances. They have two features: type and survived. This is all the necessary information we need. We translated this in an arff file heading like this:
@@ -73,7 +73,7 @@ We wanted to have a second opinion and decided to use Apriori to generate rules.
 \end{center}
 The first rule seems to defend the rule "women and children first". The rule that if you didn't survived you are a men has a high confidence. However the most likely culprit for this is that there were a lot more adult men on the titanic than women or children. So it's evident that a lot more died. The second rule also says that if you were male you died with a confidence of 0.79. Apriori however couldn't deduce rules for the children with high confidence. So with only the resulting data from Apriori it's hard to determine if the rule was followed. If we only take the adult man and woman into account we can conclude that women were saved before men because of rule two and three. This last rule says that if you were an adult woman you were saved with a confidence of 0.73. But this says nothing about the children.
 \section{The real world}
-It doesn't seem that the rule "women and children first" was carefully followed. However the data we had was very limited. We didn't know the order with which the lifeboats were let in the water. Maybe all de adult man that survived were on the boats that returned after the sinking of the titanic to help people. It's easy to assume that adult men could stay alive longer in the cold water than children.\par
-So to be ably to really decide if the rule was followed we need more data of the lifeboats. Also which persons already died on board the ship due to for example the flooding will maybe help to make a more certain decision.
+It doesn't seem that the rule "women and children first" was carefully followed. However the data we had was very limited. We didn't know the order with which the lifeboats were let in the water. Maybe all the adult man that survived were on the boats that returned after the sinking of the titanic to help people. It's easy to assume that adult men could stay alive longer in the cold water than children.\par
+So to be able to really decide if the rule was followed we need more data of the lifeboats. Also which persons already died on board the ship due to for example the flooding will maybe help to make a more certain decision.
 \printbibliography
 \end{document}
