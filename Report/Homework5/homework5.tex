@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amsxtra}
+\title{Advanced databases: Homework 5}
+\author{Leendert Dommicent and Jorn Van Loock}
+\begin{document}
+\maketitle
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\section{Introduction}
+In this homework we are going to try classifying stories in two classes, the ones who contain a princess and the ones who don't. We will do this by writing a learner and classifier in Hadoop which uses the na\"ive Bayes algorithm. As features for this algorithm we will take the occurrences of the words, \textit{castle}, \textit{king} and \textit{prince}. So this features are binary it is either yes or no.
+\section{The learner}
+We have written a Java program who classified 40 stories by looking if there is a word princess in it. He puts the two classes in two folders \textit{true} and \textit{false}. For this two folders we have to write a program in Hadoop which counts how many files contains each feature.
+\subsection{Hadoop learner}
+Our Hadoop program has two map reduce steps. The first map step will read the files and every time it finds a feature it sends \textit{$<$Word@file,\_$>$}. With every map step he also sends \textit{$<$Count@file,\_$>$} to find the total files. Then the reducer reduces this so every key occurs only once. Now we have a list with which of the features are in which file and lines with \textit{Count} in the beginning for every file.\par
+This list goes to the second mapper. This mapper splits every entry on the @ sign. For every entry it handles, it sends \textit{$<$Word,1$>$}. Now every reducers receives the occurrences of one feature and counts these. There is also a reducer who receives the \textit{Count} keys who will then calculate the total number of files.\par
+We ran this Hadoop program on the princess stories and the other stories. This were our results:
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}{.5\textwidth}
+\centering
+\begin{tabular}{c}
+\begin{lstlisting}
+Total	12
+castle	6
+king 	11
+prince	6
+\end{lstlisting}
+\end{tabular}
+\label{fig:results_princes}
+\caption{The results of the princess stories}
+\end{subfigure}
+\begin{subfigure}{.4\textwidth}
+\centering
+\begin{tabular}{c}
+\begin{lstlisting}
+Total	38
+castle	6
+king	8
+prince	1
+\end{lstlisting}
+\end{tabular}
+\label{fig:results_other}
+\caption{The results of other stories}
+\end{subfigure}
+\end{figure}
+With these results we can calculate the following chances:
+\begin{gather*}
+P(Castle | Princess) = 6/12 = 0.5\\
+P(King | Princess) = 11/12 \approx 0.91667\\
+P(Prince | Princess) = 6/12 = 0.5\\ \\
+P(Castle | \sim Princess) = 6/38 \approx 0.15789\\
+P(King | \sim Princess) = 8/38 \approx 0.2105\\
+P(Prince | \sim Princess) = 1/38 \approx 0.02631\\ \\
+\end{gather*}
+We will need this values in our classifier.
+\section{Classifier}
+\end{document}
