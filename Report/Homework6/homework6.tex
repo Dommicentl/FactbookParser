@@ -1,0 +1,87 @@
+\documentclass[a4]{article}
+\usepackage{fullpage}
+\usepackage{biblatex}
+\usepackage{listings}
+\bibliography{refs.bib}
+\title{Advanced database systems: Homework 6 draft}
+\author{Leendert Dommicent and Jorn Van Loock}
+\date{}
+\begin{document}
+\maketitle
+\setlength{\parindent}{0px}
+\setlength{\parskip}{8px}
+\section{Introduction}
+This document contains are plans for the final homework. Some actions are already done others aren't this will be clearly stated in the text. In section \ref{sec:problem} we will describe the problem domain and why the thing we will ty to do can be usefull. In section \ref{sec:gathering_data} we will explain were we got the data from and why we chose these data sources. Next in section \ref{sec:preparing_data} we explain how the data is prepared for use with Weka. Which data do we drop and why, which data we combine and so forth. In section \ref{sec:weka} we will describe how we will use Weka to find patterns in the data. Section \ref{sec:results} will explain the results we are expecting the have and what we will do with these results. Finally in section \ref{sec:conclusion} we will formulate a conclusion about the homework 6 plans.
+\section{The problem domain}
+\label{sec:problem}
+Almost every day the world suffers under terrorist attacks. Those attacks are carried out by individuals in their own name or in the name of a bigger organisation. New terrorist organizations start when other stop. For these new organizations the whole investigation about their actions must done all over again. Wouldn't it be great if we could learn from the existing and past organizations and apply this on the newly created organizations? In a very minimal way, this is after all a homework and not a thesis, we will try to do this.\par
+All terrorist attacks can be classified by a type, for example bombing or hostage taking. They also target a specific victim type like the government or a private company. We can also classify the different types of terrorist organizations. You have organizations with a cultural background and others with a political.\par
+In this research we want to determine if there is a connection between the type of terrorist organization, the continent they are active in and the type of attacks that they do. Wouldn't it be interesting if a new terrorist organization rises we can predict which attack type they will use or which people they are most likely to attack? We are very confident that this is a very interesting and useful domain to do research in.
+\section{Gathering the right data}
+\label{sec:gathering_data}
+To predict this we first have to acquire the necessary data of the terrorist organizations we know. We need to know the types of organizations, the attacks they do and where they do it.\par
+For the attacks we used GTD (Global Terrorist Database)\cite{gtd}. This database contains terrorist attacks all over the world. It contains the countries where they were executed, the type of the attacks and the type of the victims. We wrote a Java parser that parsed all these attacks and added them to an OWL ontology. You can find more information in this\cite{homework2} report.\par To know in which continent the countries of the attacks are located we used the CIA World Factbook\cite{factbook}. We also wrote a Java parser for this database and added his content to our owl ontology. Again you can find more information in this\cite{homework2} report.\par
+We also needed more information about the organizations themselves. For this we used the Terrorist Organization Profiles database\cite{start}. This database is from the same makers as GTD so names from the two databases should match. Because of this we do not have double individuals with a slightly different name in our OWL database. So also for this database we wrote a Java parser to add the data to our ontology. More information of this you can find in this\cite{homework3} report.\par
+We now have all the data we need in an OWL ontology. In the next section we will describe how we will transform this data to be able to use Weka.
+\section{Preparing the data}
+\label{sec:preparing_data}
+We need to convert our OWL ontology to an ARFF file that can be read by Weka. On the way we will simplify the data a little bit. We will write this converting program in Java. We need a way to read out our OWL ontology. For this we used the OWLAPI\cite{owlapi}. This is a powerful API for Java that allows you to read an write data to and from your ontology. We already used it to write our ontologies in the previous section but will now use it to read certain elements from the ontology.\par
+To begin the conversion we will search all attack individuals from our ontology. For every individual we will first get the terrorist organization that is responsible for the attack. If we didn't already came across this organization we will create a new organization object otherwise we will use the existing object. We will then add the country of the attack and his victim type and attack type to this organization object. If any information is missing we will just ignore the current attack. After this step is completed we have an object for every terrorist organization. This object contains all the victim types and attack types they have used, the amount of each of the types and the countries in which they operate. Now we only need the type of organization of the organization. Se we search for this information in the OWL ontology and add this to the object. Again when we do not find the type in the ontology we drop the organization, because it just isn't useful for learning.\par
+In the next step we have to simplify the data in de objects and write it to an ARFF file. First we are going to simplify the countries of the organization object. For every country in the object we will search the continent of that country. Then we will count which continent is the most occurring and throw away the other continents. We do the same for the attack types and the victim types, so only the most occurring are kept. We do understand that we make a huge generalisation by simplifying the data like this. We however will keep track of the percentage of the types and continent that are retained. So if we see that these percentages are relative low we know that the generalisation we made were bad and that the chance that they influenced are results are quite high.\par
+Now we have to convert all this organization objects to an ARFF file. First we have to create the heading of the ARFF file. To do this we have to identify the attributes of the problem and the instances. The instances are clearly the terrorist organizations. The attributes are the name of the organization, the type of the organization and the most used victim type and attack type. The first attribute is a simple string and isn't used in the actual data mining. It is just used to keep the ARFF file more clear. The other type are nominal. This means that we have to declare all the possible values up front in the header of the file. To do this we retrieve all the possible continents, attack types and victim types and add them to the header of the ARFF file. You can find the resulting header in figure \ref{fig:arff_header}. Notice that all the spaces are replaced by underscores. This is because we noticed that Weka gives errors when there are spaces in the content of attributes. So we replace spaces by underscores in the entire ARFF file. Also the (') sign gave problems so we just deleted them in the entire file.\par
+In figure \ref{fig:arff_header} you can see which possible values we use. You can see that we do not just use continents but that we sort of split up the large continents. In total we have 10 possible continent values. We hope that this split up gives us better result instead of just using the normal continents. We also taught about using countries instead of continents, but we are afraid that this gives us results that are too specific and are by consequence not very useful.
+\begin{figure}[!ht]
+\centering
+\begin{tabular}{c}
+\begin{lstlisting}
+@Relation titanic
+@ATTRIBUTE name string
+@ATTRIBUTE classification {Anarchist,Anti-Globalization,Communist/Socialist,
+Environmental,Leftist,Nationalist/Separatist,Racist,Religious,Right-Wing_Conservative,
+Right-Wing_Reactionary,n/a,Other}
+@ATTRIBUTE continent {Africa,Australia-Oceania,Central_America_and_Caribbean,
+Central_Asia,East_&_Southeast_Asia,Europe,Middle_East,North_America,South_America,
+South_Asia}
+@ATTRIBUTE victimType {Abortion_Related,Airports_&_Airlines,Business,
+Educational_Institution,Food_or_Water_Supply,Government_(Diplomatic),
+Government_(General),Journalists_&_Media,Maritime,Military,NGO,Other,Police,
+Private_Citizens_&_Property,Religious_Figures/Institutions,Telecommunication,
+Terrorists,Tourists,Transportation,Unknown,Utilities,Violent_Political_Party}
+@ATTRIBUTE attackType {Armed_Assault,Assassination,Bombing/Explosion,
+Facility/Infrastructure_Attack,Hijacking,Hostage_Taking_(Barricade_Incident),
+Hostage_Taking_(Kidnapping),Unarmed_Assault,Unknown}
+@DATA
+\end{lstlisting}
+\end{tabular}
+\caption{The header of the created ARFF file}
+\label{fig:arff_header}
+\end{figure}\par
+Now that we have the header we have to convert every object to an instance and by consequence a line in the ARFF file. You can find the structure of the line in figure \ref{fig:entry}. Notice that they are just the properties of the organisation object separated by a comma.\par
+\begin{figure}[!ht]
+\centering
+\begin{tabular}{c}
+\begin{lstlisting}
+name_organization,type_organization,continent,victim_type,attack_type
+\end{lstlisting}
+\end{tabular}
+\caption{An instance entry in the ARFF file}
+\label{fig:entry}
+\end{figure}
+If we see that the generalisation of the continent, victim type and attack type as described above are too heavy ,we can maybe add a line to the ARFF file for every attack. This will mean that for every organization there will be multiple entries. But like this we let Weka solve the problem of multiple values per organization. We however prefer the first method at the moment because it makes the ARFF file rather small. A small ARFF file means that it can be processed by Weka rather easily. We do not have the capacity to analyse very big ARFF files.\par
+Currently this is the stage were we are in the project. All the steps we stated above are already executed and we now have an ARFF file we can load into Weka. Se the actions we state below are just plans and are not yes executed.
+\section{Using Weka for data mining}
+\label{sec:weka}
+To be able to predict the attack types and victim types of future terrorist organizations we need to learn some rules about them. We can also try to find a way to classify the current organizations and if a new organization comes up we can classify them and by result know their preferred attack type and victim type. Just to make things clear we will first use the data mining to find rules for the attack type and then for the victim type. This are 2 separate problems and for this homework we consider them independent of each other. It doesn't mean that because they are in the same file we will use them at the same time. Weka has a handy functionality were you can drop certain attributes during a data mining session. We drop the name of the organization in the same way during the data mining. So all steps we describe below will be executed two times, one time for the attack types and one time for the victim types.\par
+First we will try to find certain rules in the data. An example of such a rule could be: \textit{Religious organizations that operate in Europe mostly use hostage tacking as their attack type.} For this rule mining we will try to use the rule miner Apriori. Apriori will try to find rules between a certain metric. You can for example state that it has to find rules with a confidence higher then 0.9 for example. We are planning to use this metric confidence but we will put the threshold very low just to see which rules are found. We can than decide which rules have a confidence that is high enough to use.\par
+Next we will try to classify the different organizations using a decision tree. To build this tree we are planning to use the RJ48 algorithm of Weka. This algorithm builds a decision tree. With this tree we can than classify new organizations and identify which attack and or victim types they will try to use.\par
+Like we stated already in section \ref{sec:preparing_data} we will change the ARFF file. Then we will try to repeat the steps from above to maybe get better results.
+\section{Expected results}
+\label{sec:results}
+We do realize that we are strongly simplifying the problem domain. There are most likely much other attributes that play an important role in the choices of attack types and victim types of a terrorist organizations. In the light of this course however we do not have to time to investigate other interesting organizations. Maybe this is a good and interesting subject for a thesis of some sort.\par
+So we will already be very happy if we find some rules with a reasonable confidence or find a decision tree that has a reasonable percentage of correct classifications. If we don't find any results we maybe have to conclude that their isn't a good connection between our attributes or that we didn't use enough different attributes.\par However we do feel that it is word the try.
+\section{Conclusion}
+\label{sec:conclusion}
+In this document we tried to clearly explain what are plans were for the finale homework, homework 6. We tried to structure this document according to the Crisp-DM model. It also contains which steps we already completed and which steps we still have to do.\par
+Because this is a very elaborate and thorough explanation of what we have done already and are planning to do, it is very likely we will use parts of this document in the final report. As always all our code that we used can be found on our GitHub project\cite{githubproject}.
+\printbibliography
+\end{document}
