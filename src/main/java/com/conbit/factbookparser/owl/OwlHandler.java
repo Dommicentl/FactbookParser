@@ -2,6 +2,8 @@ package com.conbit.factbookparser.owl;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -11,9 +13,13 @@ import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
+import org.semanticweb.owlapi.model.OWLIndividual;
+import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
@@ -58,7 +64,7 @@ public class OwlHandler {
 				"http://www.daml.org/2001/09/countries/fips-10-4-ont#");
 		classIriMapper.put("Country", pm);
 		classIriMapper.put("code", pm);
-		classIriMapper.put("name",pm);
+//		classIriMapper.put("name",pm);
 	}
 
 	/**
@@ -89,6 +95,42 @@ public class OwlHandler {
 		// TODO:Save only at the end or at regular intervals
 
 		return true;
+	}
+	
+	public Set<OWLIndividual> getIndividuals(String className){
+		PrefixManager pm = getCorrectPrefixManager(className);
+		OWLClass owlClass = factory.getOWLClass(className, pm);
+		return owlClass.getIndividuals(ontology);
+	}
+	
+	public OWLIndividual getIndividual(String name){
+		return factory.getOWLNamedIndividual(name, defaultPm);
+	}
+	
+	public Set<OWLIndividual> getObjectRelationIndividuals(OWLIndividual individual, String relationName){
+		 Map<OWLObjectPropertyExpression, Set<OWLIndividual>> map = individual.getObjectPropertyValues(ontology);
+		 PrefixManager pm = getCorrectPrefixManager(relationName);
+		 IRI relationIRI = pm.getIRI(relationName);
+		 for(OWLObjectPropertyExpression current: map.keySet()){
+			 IRI foundRelationIri = current.getNamedProperty().getIRI();
+			 if(relationIRI.equals(foundRelationIri)){
+				 return map.get(current);
+			 }
+		 }
+		 return null;
+	}
+	
+	public Set<OWLLiteral> getDataRelationIndividuals(OWLIndividual individual, String relationName){
+		PrefixManager pm = getCorrectPrefixManager(relationName);
+		IRI relationIRI = pm.getIRI(relationName);
+		Map<OWLDataPropertyExpression, Set<OWLLiteral>> properties = individual.getDataPropertyValues(ontology);
+		for(OWLDataPropertyExpression current: properties.keySet()){
+			IRI foundRelationIRI = current.asOWLDataProperty().getIRI();
+			if(relationIRI.equals(foundRelationIRI)){
+				 return properties.get(current);
+			 }
+		}
+		return null;
 	}
 
 	/**
