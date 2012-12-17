@@ -1,0 +1,10 @@
+file:/home/leendert/toClassify/CAT_AND_MOUSE_IN_PARTNERSHIP	NotPrincess
+file:/home/leendert/toClassify/CLEVER_ELSIE	NotPrincess
+file:/home/leendert/toClassify/CLEVER_GRETEL	NotPrincess
+file:/home/leendert/toClassify/CLEVER_HANS	NotPrincess
+file:/home/leendert/toClassify/DOCTOR_KNOWALL	NotPrincess
+file:/home/leendert/toClassify/FIRST_STORY	NotPrincess
+file:/home/leendert/toClassify/FREDERICK_AND_CATHERINE	NotPrincess
+file:/home/leendert/toClassify/THE_TWELVE_DANCING_PRINCESSES	Princess
+file:/home/leendert/toClassify/THE_VALIANT_LITTLE_TAILOR	Princess
+file:/home/leendert/toClassify/THE_WATER_OF_LIFE	Princess
