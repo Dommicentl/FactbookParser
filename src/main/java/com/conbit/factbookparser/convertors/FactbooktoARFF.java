@@ -28,7 +28,7 @@ public class FactbooktoARFF {
 	public FactbooktoARFF(String location) throws OWLOntologyCreationException{
 		logger.debug("Start parsing ontology");
 		handler = new OwlHandler("/home/leendert/Total.owl");
-		TableEntry.setHandler(handler);
+		TableEntry.init(handler);
 		logger.debug("Finished parsing ontology");
 	}
 	
@@ -46,8 +46,12 @@ public class FactbooktoARFF {
 				continue;
 			logger.debug("From perpetrator "+perpetratorName);
 			TableEntry entry = TableEntry.createEntry(perpetratorName);
-			if(!addCountry(attack,entry))
+			OWLIndividual country = addCountry(attack,entry);
+			if(country == null){
 				continue;
+			} else {
+				addNeighbours(country, entry);
+			}
 			logger.debug("Countries added");
 			if(!addAttackType(attack,entry))
 				continue;
@@ -64,6 +68,40 @@ public class FactbooktoARFF {
 		TableEntry.writoToArff(outputFileLocation);
 	}
 	
+	private boolean addNeighbours(OWLIndividual country, TableEntry entry) {
+		Set<OWLIndividual> borders = handler.getObjectRelationIndividuals(country, "border");
+		boolean isSet = false;
+		if(borders == null)
+			return false;
+		isSet = addBorders(entry, borders);
+		return isSet;
+	}
+
+	private boolean addBorders(TableEntry entry, Set<OWLIndividual> borders) {
+		boolean isSet = false;
+		Iterator<OWLIndividual> borderIterator = borders.iterator();
+		while(borderIterator.hasNext()){
+			OWLIndividual currentBorder = borderIterator.next();
+			isSet = addBorder(entry, currentBorder);
+		}
+		return isSet;
+	}
+	
+	private boolean addBorder(TableEntry entry, OWLIndividual border){
+		Set<OWLIndividual> borderCountries = handler.getObjectRelationIndividuals(border, "country");
+		if(borderCountries == null){
+			return false;
+		}
+		OWLIndividual borderCountry = borderCountries.iterator().next();
+		Set<OWLLiteral> borderCountryNames = handler.getDataRelationIndividuals(borderCountry, "name");
+		if(borderCountryNames == null){
+			return false;
+		}
+		String neighbourCountryName = borderCountryNames.iterator().next().getLiteral();
+		entry.addNeighbour(neighbourCountryName);
+		return true;
+	}
+
 	private String getPerpetratorName(OWLIndividual perpetrator) {
 		Set<OWLLiteral> names = handler.getDataRelationIndividuals(perpetrator, "name");
 		if(names == null){
@@ -125,16 +163,16 @@ public class FactbooktoARFF {
 		return oneAdded;
 	}
 
-	private boolean addCountry(OWLIndividual attack, TableEntry entry) {
+	private OWLIndividual addCountry(OWLIndividual attack, TableEntry entry) {
 		Set<OWLIndividual> countries = handler.getObjectRelationIndividuals(attack, "occured");
 		if(countries == null)
-			return false;
+			return null;
 		OWLIndividual country = countries.iterator().next();
 		Set<OWLLiteral> countryName = handler.getDataRelationIndividuals(country, "name");
 		if(countryName == null)
-			return false;
+			return null;
 		entry.addCountry(countryName.iterator().next().getLiteral());
-		return true;
+		return country;
 	}
 
 	public OWLIndividual getPerpetrator(OWLIndividual individual){

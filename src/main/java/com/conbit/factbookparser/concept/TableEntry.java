@@ -27,9 +27,20 @@ public class TableEntry {
 	private static ArrayList<TableEntry> entriesList = new ArrayList<TableEntry>();
 	private static Logger logger = Logger.getLogger(TableEntry.class.toString());
 	private static boolean allowDouble = true;
+	private static HashMap<String, String> neighbourMap = new HashMap<String, String>();
+	private HashMap<String, String> instanceNeighbourMap = new HashMap<String, String>();
 	
-	public static void setHandler(OwlHandler owlHandler){
+	public static void init(OwlHandler owlHandler){
 		handler = owlHandler;
+		Set<OWLIndividual> countries = handler.getIndividuals("Country");
+		for(OWLIndividual tempCountry : countries){
+			Set<OWLLiteral> names = handler.getDataRelationIndividuals(tempCountry, "name");
+			if(names == null){
+				logger.debug("Country name failed, ignoring...");
+			}
+			String countryName = names.iterator().next().getLiteral();
+			neighbourMap.put(countryName, "0");
+		}
 	}
 	
 	public static TableEntry createEntry(String name){
@@ -56,6 +67,11 @@ public class TableEntry {
 	
 	private TableEntry(String name){
 		this.name = name;
+		instanceNeighbourMap = (HashMap<String, String>) neighbourMap.clone(); 
+	}
+	
+	public void addNeighbour(String continent){
+		this.instanceNeighbourMap.put(continent, "1");
 	}
 	
 	public void addAttackType(String type){
@@ -121,9 +137,17 @@ public class TableEntry {
 		String attackType = getMostPopular(attackTypes);
 		if(continent == null || classification == null || victimType == null || attackType == null)
 			return null;
-		return safe(name)+","+safe(classification)+","+safe(continent)+","+safe(victimType)+","+safe(attackType);
+		return safe(name)+","+safe(classification)+","+safe(continent)+","+safe(victimType)+","+safe(attackType)+","+getCountryString();
 	}
 	
+	private String getCountryString() {
+		String toReturn="";
+		for(String countryKey : instanceNeighbourMap.keySet()){
+			toReturn = toReturn + "," + instanceNeighbourMap.get(countryKey);
+		}
+		return toReturn;
+	}
+
 	public static String safe(String input){
 		return input.replaceAll(" ", "_").replaceAll("'", "").replaceAll(",","");
 	}
@@ -178,6 +202,8 @@ public class TableEntry {
 		out.write("@ATTRIBUTE victimType {"+getIndividualNameList("VictimType")+"}\n");
 		out.flush();
 		out.write("@ATTRIBUTE attackType {"+getIndividualNameList("AttackType")+"}\n");
+		out.flush();
+		out.write("@ATTRIBUTE neighbour {"+getIndividualNameList("Country")+"}\n");
 		out.flush();
 		out.write("@DATA\n");
 		Collection<TableEntry> list;
