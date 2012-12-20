@@ -32,15 +32,10 @@ public class TableEntry {
 	
 	public static void init(OwlHandler owlHandler){
 		handler = owlHandler;
-		Set<OWLIndividual> countries = handler.getIndividuals("Country");
-		for(OWLIndividual tempCountry : countries){
-			Set<OWLLiteral> names = handler.getDataRelationIndividuals(tempCountry, "name");
-			if(names == null){
-				logger.debug("Country name failed, ignoring...");
-			}else{
-				String countryName = names.iterator().next().getLiteral();
-				neighbourMap.put(countryName, "0");
-			}
+		String countries = getIndividualNameList("Country");
+		String[] countriesArray = countries.split(",");
+		for(String country : countriesArray){
+			neighbourMap.put(country, "0");
 		}
 	}
 	
@@ -143,14 +138,22 @@ public class TableEntry {
 	}
 	
 	private String getNeighboursString() {
+		addNeighbour(this.countries.iterator().next());
 		String toReturn="";
 		for(String countryKey : instanceNeighbourMap.keySet()){
 			toReturn = toReturn + "," + instanceNeighbourMap.get(countryKey);
 		}
-		toReturn = toReturn + "," + this.countries.iterator().next();
 		return toReturn;
 	}
 
+	private static String getNeighboursCountryString() {
+		String toReturn="";
+		for(String countryKey : neighbourMap.keySet()){
+			toReturn = toReturn + "," + countryKey;
+		}
+		return toReturn;
+	}
+	
 	public static String safe(String input){
 		return input.replaceAll(" ", "_").replaceAll("'", "").replaceAll(",","");
 	}
@@ -206,7 +209,7 @@ public class TableEntry {
 		out.flush();
 		out.write("@ATTRIBUTE attackType {"+getIndividualNameList("AttackType")+"}\n");
 		out.flush();
-		out.write("@ATTRIBUTE neighbour {"+getIndividualNameList("Country")+"}\n");
+		out.write("@ATTRIBUTE neighbour {"+getNeighboursCountryString()+"}\n");
 		out.flush();
 		out.write("@DATA\n");
 		Collection<TableEntry> list;

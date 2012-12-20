@@ -35,6 +35,7 @@ public class FactbooktoARFF {
 	public void convert(String outputFileLocation) throws IOException{
 		logger.debug("Start converting...");
 		logger.debug("Searching attacks...");
+		int attackCounter = 1;
 		Set<OWLIndividual> attacks = handler.getIndividuals("Attack");
 		Iterator<OWLIndividual> attackIterator = attacks.iterator();
 		while(attackIterator.hasNext()){
@@ -64,6 +65,8 @@ public class FactbooktoARFF {
 			logger.debug("Classification added");
 			TableEntry.save(entry);
 			logger.debug("Entry saved");
+			logger.debug("Attacks done:" + attackCounter);
+			attackCounter++;
 		}
 		TableEntry.writoToArff(outputFileLocation);
 	}
