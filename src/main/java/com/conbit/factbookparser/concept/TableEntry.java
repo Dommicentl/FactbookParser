@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -22,8 +23,10 @@ public class TableEntry {
 	private HashMap<String,Integer> attackTypes = new HashMap<String, Integer>();
 	private HashMap<String,Integer> victimTypes = new HashMap<String, Integer>();
 	private Set<String> countries = new HashSet<String>();
-	private static HashMap<String, TableEntry> entries = new HashMap<String, TableEntry>();
+	private static HashMap<String, TableEntry> entriesMap = new HashMap<String, TableEntry>();
+	private static ArrayList<TableEntry> entriesList = new ArrayList<TableEntry>();
 	private static Logger logger = Logger.getLogger(TableEntry.class.toString());
+	private static boolean allowDouble = true;
 	private static HashMap<String, String> neighbourMap = new HashMap<String, String>();
 	private HashMap<String, String> instanceNeighbourMap = new HashMap<String, String>();
 	
@@ -42,16 +45,24 @@ public class TableEntry {
 	}
 	
 	public static TableEntry createEntry(String name){
-		TableEntry entry = entries.get(name);
-		if(entry != null)
+		if(!allowDouble){
+			TableEntry entry = entriesMap.get(name);
+			if(entry != null)
+				return entry;
+			entry = new TableEntry(name);
+			entriesMap.put(name, entry);
 			return entry;
-		entry = new TableEntry(name);
-		entries.put(name, entry);
-		return entry;
+		}
+		else {
+			return new TableEntry(name);
+		}
 	}
 	
 	public static void save(TableEntry entry){
-		entries.put(entry.getName(), entry);
+		if(!allowDouble)
+			entriesMap.put(entry.getName(), entry);
+		else
+			entriesList.add(entry);
 		logger.info(entry.toARFFLine());
 	}
 	
@@ -198,13 +209,18 @@ public class TableEntry {
 		out.write("@ATTRIBUTE neighbour {"+getIndividualNameList("Country")+"}\n");
 		out.flush();
 		out.write("@DATA\n");
-		for(TableEntry entry: entries.values()){
+		Collection<TableEntry> list;
+		if(!allowDouble)
+			list = entriesMap.values();
+		else
+			list = entriesList;
+		for(TableEntry entry: list){
 			String arffLine = entry.toARFFLine();
 			if(arffLine != null)
 				out.write(entry.toARFFLine()+"\n");
 				out.flush();
 		}
 		out.close();
-		entries.clear();
+		entriesMap.clear();
 	}
 }
