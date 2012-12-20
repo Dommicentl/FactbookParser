@@ -34,9 +34,10 @@ public class TableEntry {
 			Set<OWLLiteral> names = handler.getDataRelationIndividuals(tempCountry, "name");
 			if(names == null){
 				logger.debug("Country name failed, ignoring...");
+			}else{
+				String countryName = names.iterator().next().getLiteral();
+				neighbourMap.put(countryName, "0");
 			}
-			String countryName = names.iterator().next().getLiteral();
-			neighbourMap.put(countryName, "0");
 		}
 	}
 	
@@ -59,8 +60,9 @@ public class TableEntry {
 		instanceNeighbourMap = (HashMap<String, String>) neighbourMap.clone(); 
 	}
 	
-	public void addNeighbour(String continent){
-		this.instanceNeighbourMap.put(continent, "1");
+	public void addNeighbour(String neighbour){
+		this.instanceNeighbourMap.put(neighbour, "1");
+		logger.debug(name+": has neighbours: " + instanceNeighbourMap.toString());
 	}
 	
 	public void addAttackType(String type){
@@ -126,14 +128,15 @@ public class TableEntry {
 		String attackType = getMostPopular(attackTypes);
 		if(continent == null || classification == null || victimType == null || attackType == null)
 			return null;
-		return safe(name)+","+safe(classification)+","+safe(continent)+","+safe(victimType)+","+safe(attackType)+","+getCountryString();
+		return safe(name)+","+safe(classification)+","+safe(continent)+","+safe(victimType)+","+safe(attackType)+getNeighboursString();
 	}
 	
-	private String getCountryString() {
+	private String getNeighboursString() {
 		String toReturn="";
 		for(String countryKey : instanceNeighbourMap.keySet()){
 			toReturn = toReturn + "," + instanceNeighbourMap.get(countryKey);
 		}
+		toReturn = toReturn + "," + this.countries.iterator().next();
 		return toReturn;
 	}
 
