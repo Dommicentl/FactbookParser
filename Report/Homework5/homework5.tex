@@ -2,23 +2,30 @@
 \usepackage{fullpage}
 \usepackage{listings}
 \usepackage{graphicx}
+\usepackage{caption}
 \usepackage{subcaption}
+\usepackage{placeins}
 \usepackage{amsmath}
 \usepackage{amsxtra}
 \title{Advanced databases: Homework 5}
 \author{Leendert Dommicent and Jorn Van Loock}
 \begin{document}
 \maketitle
-\setlength{\parskip}{4pt}
+\setlength{\parskip}{8pt}
 \setlength{\parindent}{0pt}
 \section{Introduction}
-In this homework we are going to try classifying stories in two classes, the ones who contain a princess and the ones who don't. We will do this by writing a learner and classifier in Hadoop which uses the na\"ive Bayes algorithm. As features for this algorithm we will take the occurrences of the words, \textit{castle}, \textit{king} and \textit{prince}. So this features are binary it is either yes or no.
+In this homework we are going to try classifying stories in two classes, the ones who contain a princess and the ones who don't. We will do this by writing a learner and classifier in Hadoop which uses the na\"ive Bayes algorithm. As features for this algorithm we will take the occurrences of the words, \textit{castle}, \textit{king} and \textit{prince}. So this features are binary it is either yes or no, they are in the story or not. We chose this features because we think they are highly related to being a princess story or not.
+\par
+\textit{Note: Outputs of steps can be found in the appendix.}
 \section{The learner}
-We have written a Java program who classified 40 stories by looking if there is a word princess in it. He puts the two classes in two folders \textit{true} and \textit{false}. For this two folders we have to write a program in Hadoop which counts how many files contains each feature.
+We have written a Java program who classified 40 stories by looking if there is a word \textit{princess} in it. The program puts the stories in two folders \textit{true} or \textit{false}, representing the classification. For creatoing the learner we have to write a program in Hadoop which counts how many files contain each feature. This program is will be runned per folder.
 \subsection{Hadoop learner}
-Our Hadoop program has two map reduce steps. The first map step will read the files and every time it finds a feature it sends \textit{$<$Word@file,\_$>$}. With every map step he also sends \textit{$<$Count@file,\_$>$} to find the total files. Then the reducer reduces this so every key occurs only once. Now we have a list with which of the features are in which file and lines with \textit{Count} in the beginning for every file.\par
-This list goes to the second mapper. This mapper splits every entry on the @ sign. For every entry it handles, it sends \textit{$<$Word,1$>$}. Now every reducers receives the occurrences of one feature and counts these. There is also a reducer who receives the \textit{Count} keys who will then calculate the total number of files.\par
-We ran this Hadoop program on the princess stories and the other stories. This were our results:
+Our Hadoop program has two map-reduce steps. The first map step will read the files from a folder and every time it finds a feature it sends $<$\textit{feature}@\textit{file},\_$>$  to the output. With every map step it also sends $<$Total@\textit{file},\_$>$. This will later be used to find the total number of files. 
+The output of this mapper can hold duplicates depending on the fact that the file contains the feature word multiple times. This will be fixed in the reducer.
+Each reducer gets \textit{feature}@\textit{file} as key. At this point our duplicates are in fact already filtered out, so the reducers just reduce them to their key. Every key will occur only once in the output at this point. Now we have a list with which of the features are in which file and lines with \textit{Total} in the beginning of every file. An example of the output of the first map-reduce step can be found in the appendix.
+\par
+This list is ready for the second map-reduce step. The list goes to the mapper who splits every key on the @ sign. We place the first part in front being the new key and it gets a 1 as value. Thus for every entry being handled, it sends $<$\textit{feature},1$>$ or $<$Total,1$>$ to the output. The list will now hold duplicate $<$\textit{feature},1$>$ entries. The amount of these entries equals the number of files inside the folder containing that feature. The list holds also duplicate $<$Total,1$>$ entries. The amount of these entries equals the number of files in the folder. Now every reducer receives a feature as key and the number of values is simply the number of files containing this feature. Thus, we can iterate over the values and count them. A $<$\textit{feature},\#$>$ is sent to the output were \# is the number of files in the folder containing the feature. There is also a reducer who receives the \textit{Total} key. It is now also possible to calculate the total number of files inside the folder. This is done the same way: iterating over the values and counting them. A $<$Total,\#$>$ is sent to the output were \# is the number of files inside the folder.\par
+We ran this Hadoop program on the princess stories and the other stories. This were our results which can also be found in the appendix:
 \begin{figure}[!ht]
 \centering
 \begin{subfigure}{.5\textwidth}
@@ -48,7 +55,9 @@ prince	1
 \caption{The results of other stories}
 \end{subfigure}
 \end{figure}
-With these results we can calculate the following chances:
+\FloatBarrier
+With these results we can calculate the following chances manually:
+\FloatBarrier
 \begin{gather*}
 P(Castle | Princess) = 6/12 = 0.5\\
 P(King | Princess) = 11/12 \approx 0.91667\\
@@ -58,5 +67,62 @@ P(King | \sim Princess) = 8/38 \approx 0.2105\\
 P(Prince | \sim Princess) = 1/38 \approx 0.02631\\ \\
 \end{gather*}
 We will need this values in our classifier.
-\section{Classifier}
+\section{Hadoop Classifier}
+The classification is also done with Hadoop and has 2 map-reduce steps. 
+\par
+The first map-reduce step is the same as the one in the learner.
+This way, after the reduce step, we have again a list of which features are in which files and a \textit{Total} in the beginning of each filename like: 
+$<$\textit{feature}@\textit{file},\_$>$ and $<$Total@\textit{file},\_$>$. This is exactly the same as the first map-reduce step in the learner.
+The \textit{Total} entries are not applicable inside this classifier and will be ignored in further steps, but because this first map-reduce step is the same code as the first map-reduce of the learner they are just there but they have no additive value. The output of this first map-reduce step can also be found in the appendix.
+\par
+The second map-reduce step does the final classification. The map function splits the keys of the previous output and creates a new list like this: entries of $<$\textit{feature}@\textit{file},\_$>$ and $<$Total@\textit{file},\_$>$ are splitted and used to create $<$\textit{file},\textit{feature}$>$ and $<$\textit{file},Total$>$.
+This creates a list of entries where the filenames are the keys. 
+The values of these keys are the features that occur at least once inside the story file. 
+Thus, after this map function, each reducer gets a file as key. 
+Inside the reducer we created the integer variables \textit{isPrincess} and \textit{notPrincess} and set them to 1. 
+A reducer iterates over the values of his received key (a filename) where each value is one of the features we look for.
+Inside the iteration over the values we look which value it is and update our 2 variables. 
+For example if the value equals \textit{castle} we calculate \textit{isPrincess = isPrincess * 0.5} 
+and \textit{notPrincess = notPrincess * 0.15789} where the hardcoded numbers are those found in the Learner section.
+At the end of the iteration we take the greatest variable and put the right $<$\textit{key},\textit{value}$>$ on the output: $<$\textit{file},Princess$>$ or $<$\textit{file},NotPrincess$>$ depending which variable was the greatest.
+Finally we have a list containing the filenames as keys and the classification as the value.
+\par
+The output of both map-reduce steps can also be found in the appendix.
+\section{Evaluation}
+We first checked the classifier by running it on 10 stories. These 10 stories were also used in the learning phase so we expected a great result.
+This was also the case, the classifier was right in 10 out of the 10 cases.
+\par
+Finally we ran the classifier on 10 stories we had not used in the learning phase. By checking manually the classification was right in 9 out of the 13 cases.
+\section{Problems we encountered}
+The learner is written in 2 map-reduce steps. In fact it can be done in one step. 
+The mapper would look for features, if one is found the feature is set as key and the filename as value. 
+This is set to the output. After this mapper we would have a list with the possibility of having some 
+exactely the same entries in it. For example if a file has more than 1 time a feature in it. 
+The reducer could use a variable of the type Set$<$String$>$, a set of filenames. 
+We can then calculate the necessary things:
+Thanks to the mapper each reducer gets as key a feature and as values some filenames. 
+In these values can be duplicates. We add the values (filenames) to the set. 
+The set will not hold any duplicates so at the end of the reduce step the size of the set can be taken for the output. This way the output for learning is the same as ours but done in only 1 map-reduce step.
+\par
+This was our inital plan, but we encountered a problem how Hadoop called the reducers. Using this plan every reducer must get a key with all his values and calculate everything for that key inside that reducer.
+Our problem was a combiner for the reduce step, this resulted in the fact that a reduce step can be split up again. This way it is possible that 2 reducers receive the same key by doing each some calculations on a part of the values. The initial plan didn't work this way because the sizes of the sets will always be of some parts of the values etc..
+That's the reason why the learning is done in 2 map-reduce steps. 
+\par
+While we were writing the classifier, it would have the same problem but at this point we found we could turn off the combiner to fix the problem.
+Thus, some things could be done in less steps if we knew this fix in the beginning.
+\section{Conclusion}
+The classifier did a good job in classifying stories with the features we chose in the beginning.  The 4 out of 13 wrong classified stories was mainly because a princess story has a high chance of having the word \textit{king} in it. Each story having this word will almost certainly be classified as a princess story.
+\par
+Hadoop did a good job on this set of files. The number of files was small but we see that Hadoop can be very powerfull when it runs on a very large set of files.
+\section{Appendix}
+\subsection{Hadoop Learner}
+\subsubsection{The first map-reduce output}
+\lstinputlisting[basicstyle=\footnotesize]{learner_intermediate.txt}
+\subsubsection{The second map-reduce output}
+\lstinputlisting[basicstyle=\footnotesize]{learner_final.txt}
+\subsection{Hadoop Classifier}
+\subsubsection{The first map-reduce output}
+\lstinputlisting[basicstyle=\footnotesize]{classifier_intermediate.txt}
+\subsubsection{The second map-reduce output}
+\lstinputlisting[basicstyle=\footnotesize]{classifier_final.txt}
 \end{document}

@@ -1,0 +1,4 @@
+Total	38
+castle	6
+king	8
+prince	1

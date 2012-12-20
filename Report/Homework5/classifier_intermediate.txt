@@ -1,0 +1,17 @@
+Total@file:/home/leendert/toClassify/CAT_AND_MOUSE_IN_PARTNERSHIP	
+Total@file:/home/leendert/toClassify/CLEVER_ELSIE	
+Total@file:/home/leendert/toClassify/CLEVER_GRETEL	
+Total@file:/home/leendert/toClassify/CLEVER_HANS	
+Total@file:/home/leendert/toClassify/DOCTOR_KNOWALL	
+Total@file:/home/leendert/toClassify/FIRST_STORY	
+Total@file:/home/leendert/toClassify/FREDERICK_AND_CATHERINE	
+Total@file:/home/leendert/toClassify/THE_TWELVE_DANCING_PRINCESSES	
+Total@file:/home/leendert/toClassify/THE_VALIANT_LITTLE_TAILOR	
+Total@file:/home/leendert/toClassify/THE_WATER_OF_LIFE	
+castle@file:/home/leendert/toClassify/THE_TWELVE_DANCING_PRINCESSES	
+castle@file:/home/leendert/toClassify/THE_WATER_OF_LIFE	
+king@file:/home/leendert/toClassify/THE_TWELVE_DANCING_PRINCESSES	
+king@file:/home/leendert/toClassify/THE_VALIANT_LITTLE_TAILOR	
+king@file:/home/leendert/toClassify/THE_WATER_OF_LIFE	
+prince@file:/home/leendert/toClassify/THE_TWELVE_DANCING_PRINCESSES	
+prince@file:/home/leendert/toClassify/THE_WATER_OF_LIFE	
