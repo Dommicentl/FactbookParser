@@ -18,8 +18,8 @@ public class FactbooktoARFF {
 	
 	public static void main(String[] args) throws OWLOntologyCreationException, IOException {
 		PropertyConfigurator.configure("log4j.conf");
-		FactbooktoARFF convertor = new FactbooktoARFF("/home/jorn/Total.owl");
-		convertor.convert("/home/jorn/homework6.arff");
+		FactbooktoARFF convertor = new FactbooktoARFF("/home/leendert/Total.owl");
+		convertor.convert("/home/leendert/homework6.arff");
 	}
 
 	private OwlHandler handler;
@@ -27,7 +27,7 @@ public class FactbooktoARFF {
 	
 	public FactbooktoARFF(String location) throws OWLOntologyCreationException{
 		logger.debug("Start parsing ontology");
-		handler = new OwlHandler("/home/jorn/Total.owl");
+		handler = new OwlHandler(location);
 		TableEntry.init(handler);
 		logger.debug("Finished parsing ontology");
 	}

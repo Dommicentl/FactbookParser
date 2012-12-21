@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.model.OWLIndividual;
@@ -27,8 +29,9 @@ public class TableEntry {
 	private static ArrayList<TableEntry> entriesList = new ArrayList<TableEntry>();
 	private static Logger logger = Logger.getLogger(TableEntry.class.toString());
 	private static boolean allowDouble = true;
-	private static HashMap<String, String> neighbourMap = new HashMap<String, String>();
-	private HashMap<String, String> instanceNeighbourMap = new HashMap<String, String>();
+	private static boolean addNeighbours = true;
+	private static TreeMap<String, String> neighbourMap = new TreeMap<String, String>();
+	private TreeMap<String, String> instanceNeighbourMap = new TreeMap<String, String>();
 	
 	public static void init(OwlHandler owlHandler){
 		handler = owlHandler;
@@ -63,11 +66,16 @@ public class TableEntry {
 	
 	private TableEntry(String name){
 		this.name = name;
-		instanceNeighbourMap = (HashMap<String, String>) neighbourMap.clone(); 
+		instanceNeighbourMap = (TreeMap<String, String>) neighbourMap.clone(); 
 	}
 	
 	public void addNeighbour(String neighbour){
+		if(!addNeighbours)
+			return;
+		if(!instanceNeighbourMap.containsKey(neighbour))
+			return;
 		this.instanceNeighbourMap.put(neighbour, "1");
+		neighbourMap.put(neighbour, "1");
 		logger.debug(name+": has neighbours: " + instanceNeighbourMap.toString());
 	}
 	
@@ -134,14 +142,20 @@ public class TableEntry {
 		String attackType = getMostPopular(attackTypes);
 		if(continent == null || classification == null || victimType == null || attackType == null)
 			return null;
-		return safe(name)+","+safe(classification)+","+safe(continent)+","+safe(victimType)+","+safe(attackType)+getNeighboursString();
+		if(addNeighbours){
+			return safe(name)+","+safe(classification)+","+safe(continent)+","+safe(victimType)+","+safe(attackType)+getNeighboursString();
+		}
+		else {
+			return safe(name)+","+safe(classification)+","+safe(continent)+","+safe(victimType)+","+safe(attackType);			
+		}
 	}
 	
 	private String getNeighboursString() {
 		addNeighbour(this.countries.iterator().next());
 		String toReturn="";
 		for(String countryKey : instanceNeighbourMap.keySet()){
-			toReturn = toReturn + "," + instanceNeighbourMap.get(countryKey);
+			if(neighbourMap.get(countryKey).equals("1"))
+				toReturn = toReturn + "," + instanceNeighbourMap.get(countryKey);
 		}
 		return toReturn;
 	}
@@ -209,8 +223,14 @@ public class TableEntry {
 		out.flush();
 		out.write("@ATTRIBUTE attackType {"+getIndividualNameList("AttackType")+"}\n");
 		out.flush();
-		out.write("@ATTRIBUTE neighbour {"+getNeighboursCountryString()+"}\n");
-		out.flush();
+		if(addNeighbours){
+			for(String currentCountry: neighbourMap.keySet()){
+				if(neighbourMap.get(currentCountry).equals("1")){
+					out.write("@ATTRIBUTE "+currentCountry+" {0,1}\n");
+					out.flush();
+				}
+			}
+		}
 		out.write("@DATA\n");
 		Collection<TableEntry> list;
 		if(!allowDouble)
