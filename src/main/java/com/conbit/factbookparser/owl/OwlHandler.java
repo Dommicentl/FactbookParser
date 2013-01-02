@@ -1,11 +1,14 @@
 package com.conbit.factbookparser.owl;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -132,6 +135,16 @@ public class OwlHandler {
 		}
 		return null;
 	}
+	
+	public boolean checkAmountOfObjectRelations(String className, int amount){
+		Set<OWLIndividual> individuals = getIndividuals(className);
+		for(OWLIndividual individual : individuals){
+			Map<OWLObjectPropertyExpression, Set<OWLIndividual>> relations = individual.getObjectPropertyValues(ontology);
+			if(relations.keySet().size() != amount)
+				return false;
+		}
+		return true;
+	}
 
 	/**
 	 * Adds an object relation to the ontology
@@ -242,24 +255,5 @@ public class OwlHandler {
 		string = string.replaceAll("`", "");
 		return string;
 	}
-
-	private static String location1 = "/home/jorn/Desktop/adb_new/factbook-ont.owl";
-	private static String location2 = "/home/leendert/factbook-ont.owl";
-
-	public static void main(String[] args)  {
-		OwlHandler handler = null;
-		try{
-			handler = new OwlHandler(location1);
-		} catch(Exception e){
-			try {
-				handler = new OwlHandler(location2);
-			} catch (Exception e2){
-				e2.printStackTrace();
-			}
-		}
-		handler.addIndividual("Country", "Afghanistan");
-//		handler.addIndividual("Continent", "Europe");
-//		handler.addObjectRelation("Belgium", "liesIn", "Europe");
-//		handler.addDataProperty("airports", "Belgium", "3");
-	}
+	
 }
