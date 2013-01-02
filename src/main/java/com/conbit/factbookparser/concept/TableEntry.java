@@ -30,6 +30,7 @@ public class TableEntry {
 	private static Logger logger = Logger.getLogger(TableEntry.class.toString());
 	private static boolean allowDouble = true;
 	private static boolean addNeighbours = true;
+	private static boolean stripEmpty = false;
 	private static TreeMap<String, String> neighbourMap = new TreeMap<String, String>();
 	private TreeMap<String, String> instanceNeighbourMap = new TreeMap<String, String>();
 	
@@ -75,7 +76,8 @@ public class TableEntry {
 		if(!instanceNeighbourMap.containsKey(neighbour))
 			return;
 		this.instanceNeighbourMap.put(neighbour, "1");
-		neighbourMap.put(neighbour, "1");
+		if(stripEmpty)
+			neighbourMap.put(neighbour, "1");
 		logger.debug(name+": has neighbours: " + instanceNeighbourMap.toString());
 	}
 	
@@ -154,7 +156,9 @@ public class TableEntry {
 		addNeighbour(this.countries.iterator().next());
 		String toReturn="";
 		for(String countryKey : instanceNeighbourMap.keySet()){
-			if(neighbourMap.get(countryKey).equals("1"))
+			if(stripEmpty && neighbourMap.get(countryKey).equals("1"))
+				toReturn = toReturn + "," + instanceNeighbourMap.get(countryKey);
+			if(!stripEmpty)
 				toReturn = toReturn + "," + instanceNeighbourMap.get(countryKey);
 		}
 		return toReturn;
@@ -225,10 +229,14 @@ public class TableEntry {
 		out.flush();
 		if(addNeighbours){
 			for(String currentCountry: neighbourMap.keySet()){
-				if(neighbourMap.get(currentCountry).equals("1")){
+				if(stripEmpty && neighbourMap.get(currentCountry).equals("1")){
 					out.write("@ATTRIBUTE "+currentCountry+" {0,1}\n");
 					out.flush();
 				}
+				if(!stripEmpty){
+					out.write("@ATTRIBUTE "+currentCountry+" {0,1}\n");
+					out.flush();
+				}					
 			}
 		}
 		out.write("@DATA\n");
