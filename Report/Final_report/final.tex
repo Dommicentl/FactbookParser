@@ -3,6 +3,7 @@
 \usepackage{biblatex}
 \usepackage{listings}
 \usepackage{listings}
+\usepackage{placeins}
 \lstset{captionpos=b}
 \bibliography{refs.bib}
 \title{Advanced database systems: Homework 6}
@@ -100,7 +101,7 @@ JRA & Communist & Asia & Airports & Hijacking & 0 & 1 & ... & 0 \\ \hline
 \caption{Example of a fictive entry}
 \label{fig:example_arrf_3}
 \end{table}
-The final thing we have to do is adapt the ARFF header of the previous methods to accommodate the new features. To do this we wrote a method in our Java program that gets all countries inside the ontology. For every country found it will write the line in figure \ref{fig:country_header} to the header of the ARFF file. All this entries make the header much bigger than before.
+The final thing we have to do is adapt the ARFF header of the previous methods to accommodate the new features. To do this we wrote a method in our Java program that gets all countries inside the ontology. For every country found it will write the line in figure \ref{fig:country_header} to the header of the ARFF file. All this entries make the header much bigger than before. You can see that it is a nominal feature that can contain the values zero and one like previously explained.
 \begin{figure}[!h]
 \centering
 \begin{tabular}{c}
@@ -116,13 +117,40 @@ To make the whole ARFF file a little bit smaller we deleted all country columns 
 You can find the resulting program in our GitHub repository\cite{githubproject} which is publicly available. The class \textit{FactbooktoARFF} in package \textit{com.conbit.factbookparser.convertors} handles the actual conversion from OWL to ARFF. It contains booleans to determine which method of the three we explained you want to use.
 \section{Using Weka for data mining}
 \label{sec:weka}
-To be able to predict the attack types and victim types of future terrorist organizations we need to learn some rules about them. We can also try to find a way to classify the current organizations and if a new organization comes up we can classify them and by result know their preferred attack and victim type. Just to make things clear we will first use the data mining to find rules for the attack type and then for the victim type. This are 2 separate problems and for this homework we consider them independent of each other. It doesn't mean that because they are in the same file we will use them at the same time. Weka has a handy functionality were you can drop certain attributes during a data mining session. We drop the name of the organization in the same way during the data mining. So all steps we describe below will be executed two times, one time for the attack types and one time for the victim types.\par
-First we will try to find certain rules in the data. An example of such a rule could be: \textit{Religious organizations that operate in Europe mostly use hostage tacking as their attack type.} For this rule mining we will try to use the rule miner Apriori. Apriori will try to find rules between a certain metric. You can for example state that it has to find rules with a confidence higher then 0.9 for example. We are planning to use this metric confidence but we will put the threshold very low just to see which rules are found. We can then decide which rules have a confidence that is high enough to use.\par
-Next we will try to classify the different organizations using a decision tree. To build this tree we are planning to use the RJ48 algorithm of Weka. This algorithm can build such a decision tree. With this tree we can than classify new organizations and identify which attack and or victim types they will try to use.\par
-Like we stated already in section \ref{sec:preparing_data} we will change the ARFF file. Then we will try to repeat the steps from above to maybe get better results.
+To be able to predict the attack types and victim types of future terrorist organizations we need to learn some rules about them. We can also try to find a way to classify the current organizations and if a new organization comes up we can classify them and by result know their preferred attack and victim type. Before starting the mining algorithm on the data we first have to remove the feature name because it isn't relevant, it was just there for debugging purposes. This can easily be done in Weka.\par
+First we will try to find certain rules in the data. An example of such a rule could be: \textit{Religious organizations that operate in Europe mostly use hostage tacking as their attack type.} For this rule mining we will try to use the rule miner Apriori. Apriori will try to find rules between a certain metric. You can for example state that it has to find rules with a confidence higher then 0.9 for example. We will use Weka with the standard parameters only the minimum confidence is changed to 0.5 to get more result. With these parameters Apriori will try to find rules with a certain support it will then lower the support and try again. He will do this until he has found 10 rules. The minimum support is 0.1 with the default parameters. If we have changed the minimum support for a certain test we will explicitly mention it.\par
+Next we will try to classify the different organizations using a decision tree. To build this tree we are planning to use the J48 algorithm of Weka. This algorithm can build such a decision tree. With this tree we can than classify new organizations and identify which attack and or victim types they will try to use. We will run the J48 algorithm again with the standard parameters. We will always build 2 trees, one for prediction the victim type and one for the attack type.\par
 \section{Results}
 \label{sec:results}
+In this section we will give the results from Weka for the three data files, one for each preparing method. We will also try to interpret this message. For every preparing method we will give the results of both Apriori and J48.
+\subsection{Results for datafile with 1 entry for every organization}
+\subsubsection{Apriori}
+\FloatBarrier
+\begin{figure}[!h]
+\centering
+\begin{tabular}{c}
+\begin{lstlisting}
+1. victimType=Business 51 ==> attackType=Bombing/Explosion 39    conf:(0.76)
+2. continent=Middle_East 41 ==> attackType=Bombing/Explosion 26    conf:(0.63)
+3. continent=Europe 67 ==> attackType=Bombing/Explosion 42    conf:(0.63)
+4. classification=Other 46 ==> attackType=Bombing/Explosion 28    conf:(0.61)
+5. classification=Religious 55 ==> attackType=Bombing/Explosion 31    conf:(0.56)
+6. victimType=Business 51 ==> continent=Europe 27    conf:(0.53)
+7. classification=Nationalist/Separatist 53 ==> attackType=Bombing/Explosion 28    conf:(0.53)
+\end{lstlisting}
+\end{tabular}
+\caption{Apriori results for first data file}
+\label{fig:apriori_1}
+\end{figure}
+In figure \ref{fig:apriori_1} you can find the result of the Apriori data mining in Weka. At first sight it seems that it generated some interesting rules. However if we look closer we see that it almost always predicts the attack type \textit{Bombing/Explosion}. Rule 5 is interesting because it tells us that most businesses that have been attacked are in Europe. However this rule does not have a large confidence.\par
+We changed to minimum support to 0.05 for a second test which we think is pretty low in a dataset of 231 instances. However Weka only generated more rules with a prediction of \textit{Bombing/Explosion} as attack type. So the only information we in fact really got is that most terrorist attacks are bombings.
+\subsubsection{J48}
+The tree for the attack type only has one leaf \textit{Bombing/Explosion}. The three classifies 55\% correctly according to 10-fold cross-validation. This confirms the rules of Apriori. The most attacks that are being executed are bombing attacks.\par
+The tree for the victim types only classified 27\% correctly. It however did have 1 interesting branches. Bombing attacks in Europe mainly focus on business targets, this is true in 22 of the 42 occurrences. This was the branch with the best confidence and a decent support. And still the confidence isn't high. This resulting tree is quite bad, so that maybe explains why Apriori couldn't give any rules.
+\subsubsection{Conclusion}
+It's clear that we simplified the data to much. For the attack types we got a decent result but it wasn't a very helpful result. For the victim types we didn't get a good result at all. We hope we get better results for the other data files.
 \section{Limitations}
+In this section we will give the results for the datafile constructed in section \ref{sec:1_for_organization}.
 \label{sec:limitations}
 \section{Conclusion}
 \label{sec:conclusion}
