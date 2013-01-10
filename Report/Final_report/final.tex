@@ -2,8 +2,8 @@
 \usepackage{fullpage}
 \usepackage{biblatex}
 \usepackage{listings}
-\usepackage{listings}
 \usepackage{placeins}
+\usepackage{graphicx}
 \lstset{captionpos=b}
 \bibliography{refs.bib}
 \title{Advanced database systems: Homework 6}
@@ -80,6 +80,7 @@ Maybe the simplification of all victim types and attack types from every attack 
 The Java program from section \ref{sec:1_for_organization} creates one object for every terrorist organization. If it iterates over an attack of an organization for which the terrorist organization object is already initialized, it will just return this object to work with. It will then for example add another attack type to this object. To make the requested modification we just have to create a new terrorist organization object for every attack in the database. In the rest of this section we will call this object an entry object to keep things clear. So we just remove the code that checks if the entry object is already created. The rest of the code that simplifies the entry objects is now unnecessary but we can leave it there. Because every entry object now has only one victim type and one attack type, because an attack has only one victim type and one attack type, it is automatically selected by the simplification algorithm.\par
 The structure of the resulting ARFF file is the same as in section \ref{sec:1_for_organization}. However in section  \ref{sec:1_for_organization} we have a line like the one in figure \ref{fig:entry} for every organization. Now however we have such a line for every attack but with the same structure. So for example if the IRA has carried out multiple attacks they will have multiple entries in the file. So with this way of preperation we have a much bigger file than the first way. In the file of \ref{sec:1_for_organization} we have around 200 entries, with this system we have around 13000 entries. So with this method we have a lot more data to work with.
 \subsection{1 entry for every attack with neighbours}
+\label{sec:withneighbours}
 While we were explaining our plans for this homework, it was brought to our attention that continent is maybe a too general feature. Maybe it was better to work with regions instead of full continents even when we split some big continents up. Because of the time constraints of this project it wasn't feasible to manually enter a region for every country. We also didn't find a good data source that contained this data. So we had to come up with another solution that made us able to split up the continents in smaller pieces and which could be done in an automated fashion.\par
 We found a solution that would chain neighbouring  countries together. So for every attack we fetch the country and add it to the entry object. After we do this we traverse all created entry objects. For every object we get the neighbouring countries of the country contained by the object and add it to the object. We then delete duplicate countries. If we want to we can do this 2 steps several times to make the regions bigger. For this homework however we will not do this but the code can be extended easily to support this. We now have entry objects that contain the country of the attack and the neighbouring countries. We now have to translate this to an ARFF file.\par
 To translate this we will use the structure you can find in table \ref{fig:structure_arrf_3}. So we kept all the features from the previous methods but we added one for every country in the database. This feature will contain zero or one depending of the fact if the attack took place in this country or in a neighbouring country.\par
@@ -124,6 +125,7 @@ Next we will try to classify the different organizations using a decision tree. 
 \label{sec:results}
 In this section we will give the results from Weka for the three data files, one for each preparing method. We will also try to interpret this message. For every preparing method we will give the results of both Apriori and J48.
 \subsection{Results for datafile with 1 entry for every organization}
+In this section we will give the results for the datafile constructed in section \ref{sec:1_for_organization}.
 \subsubsection{Apriori}
 \FloatBarrier
 \begin{figure}[!h]
@@ -149,9 +151,104 @@ The tree for the attack type only has one leaf \textit{Bombing/Explosion}. The t
 The tree for the victim types only classified 27\% correctly. It however did have 1 interesting branches. Bombing attacks in Europe mainly focus on business targets, this is true in 22 of the 42 occurrences. This was the branch with the best confidence and a decent support. And still the confidence isn't high. This resulting tree is quite bad, so that maybe explains why Apriori couldn't give any rules.
 \subsubsection{Conclusion}
 It's clear that we simplified the data to much. For the attack types we got a decent result but it wasn't a very helpful result. For the victim types we didn't get a good result at all. We hope we get better results for the other data files.
+\subsection{Results for datafile with 1 entry for every attack}
+In this section we will give the results of Weka for the data file that was constructed in section \ref{sec:1_for_attack}.
+\subsubsection{Apriori}
+\begin{figure}[!h]
+\begin{tabular}{c}
+\begin{lstlisting}
+ 1. continent=South_America 2152 ==> classification=Communist/Socialist 1863    conf:(0.87)
+ 2. continent=Middle_East 1649 ==> classification=Nationalist/Separatist 1384    conf:(0.84)
+ 3. continent=Europe attackType=Bombing/Explosion 1724 
+      ==> classification=Nationalist/Separatist 1335    conf:(0.77)
+ 4. continent=Europe 3234 ==> classification=Nationalist/Separatist 2470    conf:(0.76)
+ 5. continent=South_Asia 2898 ==> classification=Religious 1957    conf:(0.68)
+ 6. classification=Nationalist/Separatist attackType=Bombing/Explosion 2123 
+      ==> continent=Europe 1335    conf:(0.63)
+ 7. continent=East_&_Southeast_Asia 2389 ==> classification=Communist/Socialist 1454    conf:(0.61)
+ 8. classification=Religious 3268 ==> continent=South_Asia 1957    conf:(0.6)
+ 9. classification=Nationalist/Separatist continent=Europe 2470 
+      ==> attackType=Bombing/Explosion 1335    conf:(0.54)
+10. continent=Europe 3234 ==> attackType=Bombing/Explosion 1724    conf:(0.53)
+\end{lstlisting}
+\end{tabular}
+\caption{Apriori results for second data file}
+\label{fig:apriori_2}
+\end{figure}
+In figure \ref{fig:apriori_2} you can find the results of Apriori for the second data file. It does contain some interesting rules. Like for example rule 3, A bombing attack in Europe is most likely executed by a nationalist/separatist organization. However the next rule tells us with almost the same confidence that terrorist organizations in Europe are most likely to be Nationalist/Seperatist. This makes rule 3 less interesting. We think that the most interesting information this rules contain is that Europe has many Nationalist/Seperatist organizations, South Asia has many religious organizations and East and Southeast Asia has many Communist/Socialist organizations. However the only rules that are interesting for are question are rules 9 and 10 and both again predict Bombing/Explosion and have a low confidence. Again no rules could be generated for victim types.\par
+Maybe we do not get rules for victim types because they are more possible values and our minimum support is by consequence too high. So as a second test we changed the minimum support to 0.01 and only let Weka produce rules that predict victim type. You can find the result in figure \ref{fig:apriori_21}. This gives us 2 very specific rules but the confidence of this rules isn't that high.
+\begin{figure}[!h]
+\begin{tabular}{c}
+\begin{lstlisting}
+  1. classification=Nationalist/Separatist continent=Europe 
+      attackType=Facility/Infrastructure_Attack 236
+       ==> victimType=Business 138    conf:(0.58)
+  2. continent=Europe attackType=Facility/Infrastructure_Attack 297 
+       ==> victimType=Business 167    conf:(0.56)
+  3. classification=Nationalist/Separatist 
+       attackType=Facility/Infrastructure_Attack 348 
+         ==> victimType=Business 187    conf:(0.54)
+\end{lstlisting}
+\end{tabular}
+\caption{Apriori results for victim types with min support 0.01}
+\label{fig:apriori_21}
+\end{figure}
+For completeness we did the same test with only rules that predict attack types. Most of the rules we got still predicted \textit{Bombing/Explosion} but we also got some interesting rules about Armed Assault. You can find them in figure \ref{fig:apriori_22}.
+\begin{figure}[!h]
+\begin{tabular}{c}
+\begin{lstlisting}
+  4. classification=Nationalist/Separatist continent=Middle_East victimType=Police 211 
+       ==> attackType=Armed_Assault 150    conf:(0.71)
+  7. continent=Middle_East victimType=Police 226 
+       ==> attackType=Armed_Assault 151    conf:(0.67)
+  8. classification=Nationalist/Separatist continent=Middle_East victimType=Military 415 
+       ==> attackType=Armed_Assault 277    conf:(0.67)
+  9. classification=Communist/Socialist continent=South_America victimType=Military 352 
+       ==> attackType=Armed_Assault 233    conf:(0.66)
+\end{lstlisting}
+\end{tabular}
+\caption{Apriori results for attack types with min support 0.01}
+\label{fig:apriori_22}
+\end{figure}
+\subsubsection{J48}
+We first generated the tree for the attack types. We found a tree that classifies around 50\% correctly according to the 10-fold cross validation. This isn't a good result. Also the most interesting branches again are for \textit{Bombing/Explosions}. Another found branch is that attacks against military targets in Central America are armed assaults with a confidence of 87\%. This is also true for continents East and Southeast Asia with a confidence of 62\%. Also more in general we can see that attacks on the military are in many cases armed assaults, this can be interesting to know. In general there aren't much branches with a high confidence and the one we do find with a high confidence and reasonable support always predict bombing or armed assault.\par
+The tree generated for the victim types only classifies 34\% correctly according to 10-fold cross validation. This result is even worse than that of the attack types. We will therefore again just give some interesting branches. Armed assaults in Central America are against military with a confidence of 58\%. African religious groups bomb private citizens \& property with a confidence of 61\%. If the same African groups take someone hostage it is also a private citizen with a confidence of 78\%. More general we see that African groups target private citizens a lot.
+\subsubsection{Conclusion}
+We didn't got great results. We have found some very specific interesting patterns but we weren't able the give a global picture. The trees for this had a too low quality. You can find more reasons why the result wasn't good in section \ref{sec:limitations}. 
+\subsection{Results for datafile with neighbours}
+In this section we give the results of the data prepared in section \ref{sec:withneighbours}.
+\subsubsection{Apriori}
+\label{sec:apriori_3}
+We tried to run Apriori on this data but it ran out of memory on our machine with 2.5 Gb allocated for Weka. Next we tried to run it on a server with 12 Gb allocated for Weka. We also tried to set the start support equal to the minimum support so that it would do the calculations only for this support values but also this ran out of memory. By consequence we do not have results of apriori for this datafile. It is just too big.
+\subsubsection{J48}
+We first ran the algorithm on the original datafile as constructed in section \ref{sec:withneighbours}. But this gave us a tree that was way too big even with the pruning method within J48. So for this results we deleted the continent feature because it's information is quite redundant. This made the tree a lot smaller.\par
+First we have build the tree for the attack type. It classifies 49\% correctly according to the 10-fold cross validation. This again isn't a good result. Also a lot of branches end up in bombing/explosions. We expected to have better results but the new way of arranging the data make the tree just more confusing. Countries from around the world are in the same branch multiple times. We would have expected that neighbouring countries would be in the same branches. So our attempt to group the countries by region didn't quite work.\par
+The tree for the victim types isn't any better. It only classifies 32\% correctly. For example an unarmed assault of nationalists in Ghana or Uganda will focus on private citizens with a confidence of 85\%. However this says something about the 2 countries separately but nothing about the region, because the two countries do not lie close to each other. And in fact this was the only branch with a good confidence and reasonable support.
+\subsubsection{Conclusion}
+The results aren't so good. Where for the other file Apriori gave some good results, for this file we could not generate this rules. Also the trees were not as good as for the other data files. All de countries separately just made the tree much more confusion.
 \section{Limitations}
-In this section we will give the results for the datafile constructed in section \ref{sec:1_for_organization}.
 \label{sec:limitations}
+So the results we got weren't great. In this section we will try to explain some limitations of our project that maybe contributed to the bad data mining results.\par
+The first problem we had was that we didn't had a reasonable equal amount of entries for the different type of attacks and victims. For example in figure \ref{fig:attack_distribution} and \ref{fig:victim_distribution} you can find the distribution for the attack type and victim type respectively for the second and third datafile. It is even worse for the first data file. This makes it hard to determine a good support. For example a rule for an bombing attack (5182) needs a bigger support to be interesting than a rule about unarmed assaults (142). And Weka doesn't allow this. The values that occur many times more just overrun the ones with less entries. We didn't know how to solve this. If we would try to equal the data entries we had to delete a lot of entries and by consequence loose interesting data.\par
+\begin{figure}[!h]
+\centering
+\begin{minipage}{0.49\textwidth}
+  \centering
+  \includegraphics[width=0.8\textwidth]{images/attacktype.png}
+  \caption{Distribution attack types}
+  \label{fig:attack_distribution}
+\end{minipage}
+\begin{minipage}{0.49\textwidth}
+  \centering
+  \includegraphics[width=0.8\textwidth]{images/victimtype.png}
+  \caption{Distribution victim types}
+  \label{fig:victim_distribution}
+\end{minipage}
+\end{figure}
+The next limitation is that we do not take many features of terrorist organizations into account. We only have the features classification and geographical location into account. Now it is reasonable to think that there are other elements that maybe influence the decision of an attack or a victim type. One example is the average monthly income of a country. Maybe countries with a high average income carry out attacks that our much more sophisticated than in countries with a low average income. Due to time constraints we decided to only take the geographical location and classification into account. The results show that they weren't very good features unfortunately.\par
+Another limitation of course was the amount of computation power we had. We only had a machine that could allocate 2,5 Gb for Weka. Like we already stated in section \ref{sec:apriori_3} this wasn't enough. There was also a server with 12 Gb but we couldn't really experiment on that because for every argument we changed we had to mail an executable to be ran on the server which would take a long time. That wasn't workable.
+\section{What we also wanted to do}
+We would really liked to have Apriori run on the third datafile, because the Apriori results were better than the J48 for the previous two datafiles. Also if we had more time we would have put the minimum support very low and let Apriori generate as much rules as possible. Than we can manually select the interesting rules for every attack type and victim type. We can determine the acceptable support for every possible type value manually.
 \section{Conclusion}
 \label{sec:conclusion}
 In this document we tried to clearly explain what our plans were for the final homework, homework 6. We tried to structure this document according to the Crisp-DM model. It also contains which steps we already completed and which steps we still have to do.\par
