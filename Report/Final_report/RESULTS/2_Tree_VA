@@ -1,0 +1,527 @@
+=== Run information ===
+
+Scheme:weka.classifiers.trees.J48 -C 0.25 -M 2
+Relation:     titanic-weka.filters.unsupervised.attribute.Remove-R1
+Instances:    13078
+Attributes:   4
+              classification
+              continent
+              victimType
+              attackType
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+
+attackType = Armed_Assault
+|   continent = Africa: Private_Citizens_&_Property (110.0/57.0)
+|   continent = Australia-Oceania: Military (0.0)
+|   continent = Central_America_and_Caribbean: Military (140.0/59.0)
+|   continent = Central_Asia: Military (4.0/2.0)
+|   continent = East_&_Southeast_Asia: Military (776.0/499.0)
+|   continent = Europe
+|   |   classification = Anarchist: NGO (1.0)
+|   |   classification = Anti-Globalization: Police (0.0)
+|   |   classification = Communist/Socialist: Business (115.0/73.0)
+|   |   classification = Environmental: Police (0.0)
+|   |   classification = Leftist: Government_(Diplomatic) (4.0/2.0)
+|   |   classification = Nationalist/Separatist: Police (214.0/114.0)
+|   |   classification = Racist: Police (0.0)
+|   |   classification = Religious: Police (0.0)
+|   |   classification = Right-Wing_Conservative: Business (1.0)
+|   |   classification = Right-Wing_Reactionary: Police (0.0)
+|   |   classification = n/a: Police (0.0)
+|   |   classification = Other: Military (1.0)
+|   continent = Middle_East
+|   |   classification = Anarchist: Military (0.0)
+|   |   classification = Anti-Globalization: Military (0.0)
+|   |   classification = Communist/Socialist: Military (0.0)
+|   |   classification = Environmental: Military (0.0)
+|   |   classification = Leftist: Military (0.0)
+|   |   classification = Nationalist/Separatist: Military (597.0/320.0)
+|   |   classification = Racist: Military (0.0)
+|   |   classification = Religious: Private_Citizens_&_Property (26.0/12.0)
+|   |   classification = Right-Wing_Conservative: Military (0.0)
+|   |   classification = Right-Wing_Reactionary: Military (0.0)
+|   |   classification = n/a: Military (0.0)
+|   |   classification = Other: Military (3.0)
+|   continent = North_America: Police (37.0/21.0)
+|   continent = South_America
+|   |   classification = Anarchist: Military (0.0)
+|   |   classification = Anti-Globalization: Military (0.0)
+|   |   classification = Communist/Socialist: Military (615.0/382.0)
+|   |   classification = Environmental: Military (0.0)
+|   |   classification = Leftist: Police (31.0/15.0)
+|   |   classification = Nationalist/Separatist: Business (2.0/1.0)
+|   |   classification = Racist: Military (0.0)
+|   |   classification = Religious: Military (0.0)
+|   |   classification = Right-Wing_Conservative: Military (0.0)
+|   |   classification = Right-Wing_Reactionary: Military (0.0)
+|   |   classification = n/a: Military (0.0)
+|   |   classification = Other: Government_(General) (16.0/4.0)
+|   continent = South_Asia
+|   |   classification = Anarchist: Private_Citizens_&_Property (0.0)
+|   |   classification = Anti-Globalization: Private_Citizens_&_Property (0.0)
+|   |   classification = Communist/Socialist: Police (32.0/16.0)
+|   |   classification = Environmental: Private_Citizens_&_Property (0.0)
+|   |   classification = Leftist: Private_Citizens_&_Property (0.0)
+|   |   classification = Nationalist/Separatist: Private_Citizens_&_Property (301.0/177.0)
+|   |   classification = Racist: Private_Citizens_&_Property (0.0)
+|   |   classification = Religious: Private_Citizens_&_Property (592.0/429.0)
+|   |   classification = Right-Wing_Conservative: Private_Citizens_&_Property (0.0)
+|   |   classification = Right-Wing_Reactionary: Private_Citizens_&_Property (0.0)
+|   |   classification = n/a: Private_Citizens_&_Property (0.0)
+|   |   classification = Other: Police (5.0/3.0)
+attackType = Assassination
+|   continent = Africa: Government_(General) (30.0/21.0)
+|   continent = Australia-Oceania: Military (1.0)
+|   continent = Central_America_and_Caribbean
+|   |   classification = Anarchist: Educational_Institution (0.0)
+|   |   classification = Anti-Globalization: Educational_Institution (0.0)
+|   |   classification = Communist/Socialist: Educational_Institution (0.0)
+|   |   classification = Environmental: Educational_Institution (0.0)
+|   |   classification = Leftist: Government_(General) (4.0/3.0)
+|   |   classification = Nationalist/Separatist: Educational_Institution (0.0)
+|   |   classification = Racist: Educational_Institution (0.0)
+|   |   classification = Religious: Educational_Institution (0.0)
+|   |   classification = Right-Wing_Conservative: Educational_Institution (0.0)
+|   |   classification = Right-Wing_Reactionary: Educational_Institution (2.0)
+|   |   classification = n/a: Educational_Institution (0.0)
+|   |   classification = Other: Private_Citizens_&_Property (1.0)
+|   continent = Central_Asia: Police (0.0)
+|   continent = East_&_Southeast_Asia: Government_(General) (343.0/235.0)
+|   continent = Europe
+|   |   classification = Anarchist: Police (0.0)
+|   |   classification = Anti-Globalization: Police (0.0)
+|   |   classification = Communist/Socialist: Police (127.0/64.0)
+|   |   classification = Environmental: Police (0.0)
+|   |   classification = Leftist: Police (0.0)
+|   |   classification = Nationalist/Separatist: Police (535.0/314.0)
+|   |   classification = Racist: Police (0.0)
+|   |   classification = Religious: Government_(General) (2.0)
+|   |   classification = Right-Wing_Conservative: Terrorists (2.0)
+|   |   classification = Right-Wing_Reactionary: Police (0.0)
+|   |   classification = n/a: Police (0.0)
+|   |   classification = Other: Government_(Diplomatic) (5.0/2.0)
+|   continent = Middle_East: Private_Citizens_&_Property (160.0/127.0)
+|   continent = North_America
+|   |   classification = Anarchist: Abortion_Related (0.0)
+|   |   classification = Anti-Globalization: Abortion_Related (0.0)
+|   |   classification = Communist/Socialist: Business (4.0/2.0)
+|   |   classification = Environmental: Abortion_Related (0.0)
+|   |   classification = Leftist: Abortion_Related (0.0)
+|   |   classification = Nationalist/Separatist: Government_(Diplomatic) (1.0)
+|   |   classification = Racist: Abortion_Related (0.0)
+|   |   classification = Religious: Abortion_Related (3.0)
+|   |   classification = Right-Wing_Conservative: Abortion_Related (0.0)
+|   |   classification = Right-Wing_Reactionary: Abortion_Related (0.0)
+|   |   classification = n/a: Abortion_Related (0.0)
+|   |   classification = Other: Abortion_Related (0.0)
+|   continent = South_America
+|   |   classification = Anarchist: Government_(General) (0.0)
+|   |   classification = Anti-Globalization: Government_(General) (0.0)
+|   |   classification = Communist/Socialist: Private_Citizens_&_Property (162.0/108.0)
+|   |   classification = Environmental: Government_(General) (0.0)
+|   |   classification = Leftist: Police (14.0/4.0)
+|   |   classification = Nationalist/Separatist: Government_(General) (0.0)
+|   |   classification = Racist: Government_(General) (0.0)
+|   |   classification = Religious: Government_(General) (0.0)
+|   |   classification = Right-Wing_Conservative: Military (1.0)
+|   |   classification = Right-Wing_Reactionary: Government_(General) (0.0)
+|   |   classification = n/a: Government_(General) (0.0)
+|   |   classification = Other: Government_(General) (17.0/8.0)
+|   continent = South_Asia: Government_(General) (111.0/69.0)
+attackType = Bombing/Explosion
+|   continent = Africa
+|   |   classification = Anarchist: Business (0.0)
+|   |   classification = Anti-Globalization: Business (0.0)
+|   |   classification = Communist/Socialist: Business (0.0)
+|   |   classification = Environmental: Business (0.0)
+|   |   classification = Leftist: Business (0.0)
+|   |   classification = Nationalist/Separatist: Business (44.0/26.0)
+|   |   classification = Racist: Business (0.0)
+|   |   classification = Religious: Private_Citizens_&_Property (13.0/5.0)
+|   |   classification = Right-Wing_Conservative: Business (0.0)
+|   |   classification = Right-Wing_Reactionary: Business (0.0)
+|   |   classification = n/a: Business (0.0)
+|   |   classification = Other: Military (39.0/31.0)
+|   continent = Australia-Oceania: Government_(Diplomatic) (3.0)
+|   continent = Central_America_and_Caribbean
+|   |   classification = Anarchist: Private_Citizens_&_Property (0.0)
+|   |   classification = Anti-Globalization: Private_Citizens_&_Property (0.0)
+|   |   classification = Communist/Socialist: Government_(General) (10.0/7.0)
+|   |   classification = Environmental: Private_Citizens_&_Property (0.0)
+|   |   classification = Leftist: Utilities (59.0/41.0)
+|   |   classification = Nationalist/Separatist: Private_Citizens_&_Property (0.0)
+|   |   classification = Racist: Private_Citizens_&_Property (0.0)
+|   |   classification = Religious: Airports_&_Airlines (1.0)
+|   |   classification = Right-Wing_Conservative: Government_(Diplomatic) (1.0)
+|   |   classification = Right-Wing_Reactionary: Airports_&_Airlines (1.0)
+|   |   classification = n/a: Private_Citizens_&_Property (0.0)
+|   |   classification = Other: Government_(General) (15.0/12.0)
+|   continent = Central_Asia: Military (6.0/4.0)
+|   continent = East_&_Southeast_Asia
+|   |   classification = Anarchist: Private_Citizens_&_Property (0.0)
+|   |   classification = Anti-Globalization: Private_Citizens_&_Property (0.0)
+|   |   classification = Communist/Socialist: Transportation (276.0/217.0)
+|   |   classification = Environmental: Private_Citizens_&_Property (0.0)
+|   |   classification = Leftist: Private_Citizens_&_Property (0.0)
+|   |   classification = Nationalist/Separatist: Private_Citizens_&_Property (2.0)
+|   |   classification = Racist: Private_Citizens_&_Property (0.0)
+|   |   classification = Religious: Private_Citizens_&_Property (427.0/330.0)
+|   |   classification = Right-Wing_Conservative: Private_Citizens_&_Property (1.0)
+|   |   classification = Right-Wing_Reactionary: Private_Citizens_&_Property (0.0)
+|   |   classification = n/a: Private_Citizens_&_Property (0.0)
+|   |   classification = Other: Private_Citizens_&_Property (0.0)
+|   continent = Europe: Business (1724.0/1114.0)
+|   continent = Middle_East
+|   |   classification = Anarchist: Private_Citizens_&_Property (0.0)
+|   |   classification = Anti-Globalization: Private_Citizens_&_Property (0.0)
+|   |   classification = Communist/Socialist: Airports_&_Airlines (2.0/1.0)
+|   |   classification = Environmental: Private_Citizens_&_Property (0.0)
+|   |   classification = Leftist: Government_(Diplomatic) (3.0)
+|   |   classification = Nationalist/Separatist: Military (444.0/333.0)
+|   |   classification = Racist: Private_Citizens_&_Property (0.0)
+|   |   classification = Religious: Private_Citizens_&_Property (162.0/76.0)
+|   |   classification = Right-Wing_Conservative: Private_Citizens_&_Property (0.0)
+|   |   classification = Right-Wing_Reactionary: Private_Citizens_&_Property (0.0)
+|   |   classification = n/a: Private_Citizens_&_Property (0.0)
+|   |   classification = Other: Military (25.0/16.0)
+|   continent = North_America
+|   |   classification = Anarchist: Business (0.0)
+|   |   classification = Anti-Globalization: Business (0.0)
+|   |   classification = Communist/Socialist: Business (5.0)
+|   |   classification = Environmental: Business (3.0/1.0)
+|   |   classification = Leftist: Business (0.0)
+|   |   classification = Nationalist/Separatist: Government_(Diplomatic) (4.0/1.0)
+|   |   classification = Racist: Business (0.0)
+|   |   classification = Religious: Business (0.0)
+|   |   classification = Right-Wing_Conservative: Business (0.0)
+|   |   classification = Right-Wing_Reactionary: Business (0.0)
+|   |   classification = n/a: Business (0.0)
+|   |   classification = Other: Airports_&_Airlines (1.0)
+|   continent = South_America
+|   |   classification = Anarchist: Business (0.0)
+|   |   classification = Anti-Globalization: Business (0.0)
+|   |   classification = Communist/Socialist: Utilities (547.0/439.0)
+|   |   classification = Environmental: Business (0.0)
+|   |   classification = Leftist: Business (72.0/47.0)
+|   |   classification = Nationalist/Separatist: Religious_Figures/Institutions (1.0)
+|   |   classification = Racist: Business (0.0)
+|   |   classification = Religious: Business (0.0)
+|   |   classification = Right-Wing_Conservative: Business (0.0)
+|   |   classification = Right-Wing_Reactionary: Business (0.0)
+|   |   classification = n/a: Government_(Diplomatic) (1.0)
+|   |   classification = Other: Business (94.0/53.0)
+|   continent = South_Asia
+|   |   classification = Anarchist: Private_Citizens_&_Property (0.0)
+|   |   classification = Anti-Globalization: Private_Citizens_&_Property (0.0)
+|   |   classification = Communist/Socialist: Police (50.0/23.0)
+|   |   classification = Environmental: Private_Citizens_&_Property (0.0)
+|   |   classification = Leftist: Private_Citizens_&_Property (0.0)
+|   |   classification = Nationalist/Separatist: Private_Citizens_&_Property (288.0/224.0)
+|   |   classification = Racist: Private_Citizens_&_Property (0.0)
+|   |   classification = Religious: Private_Citizens_&_Property (856.0/681.0)
+|   |   classification = Right-Wing_Conservative: Private_Citizens_&_Property (0.0)
+|   |   classification = Right-Wing_Reactionary: Private_Citizens_&_Property (0.0)
+|   |   classification = n/a: Private_Citizens_&_Property (0.0)
+|   |   classification = Other: Business (2.0/1.0)
+attackType = Facility/Infrastructure_Attack
+|   continent = Africa
+|   |   classification = Anarchist: Private_Citizens_&_Property (0.0)
+|   |   classification = Anti-Globalization: Private_Citizens_&_Property (0.0)
+|   |   classification = Communist/Socialist: Private_Citizens_&_Property (0.0)
+|   |   classification = Environmental: Private_Citizens_&_Property (0.0)
+|   |   classification = Leftist: Private_Citizens_&_Property (0.0)
+|   |   classification = Nationalist/Separatist: Utilities (6.0/3.0)
+|   |   classification = Racist: Private_Citizens_&_Property (0.0)
+|   |   classification = Religious: Private_Citizens_&_Property (16.0/9.0)
+|   |   classification = Right-Wing_Conservative: Private_Citizens_&_Property (0.0)
+|   |   classification = Right-Wing_Reactionary: Private_Citizens_&_Property (0.0)
+|   |   classification = n/a: Private_Citizens_&_Property (0.0)
+|   |   classification = Other: Utilities (1.0)
+|   continent = Australia-Oceania: Business (0.0)
+|   continent = Central_America_and_Caribbean
+|   |   classification = Anarchist: Business (0.0)
+|   |   classification = Anti-Globalization: Business (0.0)
+|   |   classification = Communist/Socialist: Government_(General) (5.0/3.0)
+|   |   classification = Environmental: Business (0.0)
+|   |   classification = Leftist: Business (2.0/1.0)
+|   |   classification = Nationalist/Separatist: Business (0.0)
+|   |   classification = Racist: Business (0.0)
+|   |   classification = Religious: Business (0.0)
+|   |   classification = Right-Wing_Conservative: Business (0.0)
+|   |   classification = Right-Wing_Reactionary: Business (0.0)
+|   |   classification = n/a: Business (0.0)
+|   |   classification = Other: Business (1.0)
+|   continent = Central_Asia: Business (0.0)
+|   continent = East_&_Southeast_Asia
+|   |   classification = Anarchist: Business (0.0)
+|   |   classification = Anti-Globalization: Business (0.0)
+|   |   classification = Communist/Socialist: Business (125.0/78.0)
+|   |   classification = Environmental: Business (0.0)
+|   |   classification = Leftist: Business (0.0)
+|   |   classification = Nationalist/Separatist: Private_Citizens_&_Property (4.0)
+|   |   classification = Racist: Business (0.0)
+|   |   classification = Religious: Private_Citizens_&_Property (66.0/51.0)
+|   |   classification = Right-Wing_Conservative: Business (0.0)
+|   |   classification = Right-Wing_Reactionary: Business (0.0)
+|   |   classification = n/a: Business (0.0)
+|   |   classification = Other: Airports_&_Airlines (1.0)
+|   continent = Europe: Business (297.0/130.0)
+|   continent = Middle_East
+|   |   classification = Anarchist: Business (0.0)
+|   |   classification = Anti-Globalization: Business (0.0)
+|   |   classification = Communist/Socialist: Business (0.0)
+|   |   classification = Environmental: Business (0.0)
+|   |   classification = Leftist: Business (0.0)
+|   |   classification = Nationalist/Separatist: Business (75.0/35.0)
+|   |   classification = Racist: Business (0.0)
+|   |   classification = Religious: Private_Citizens_&_Property (5.0/3.0)
+|   |   classification = Right-Wing_Conservative: Business (0.0)
+|   |   classification = Right-Wing_Reactionary: Business (0.0)
+|   |   classification = n/a: Business (0.0)
+|   |   classification = Other: Business (0.0)
+|   continent = North_America: Business (3.0/1.0)
+|   continent = South_America
+|   |   classification = Anarchist: Transportation (0.0)
+|   |   classification = Anti-Globalization: Transportation (0.0)
+|   |   classification = Communist/Socialist: Transportation (124.0/84.0)
+|   |   classification = Environmental: Transportation (0.0)
+|   |   classification = Leftist: Religious_Figures/Institutions (11.0/5.0)
+|   |   classification = Nationalist/Separatist: Transportation (0.0)
+|   |   classification = Racist: Transportation (0.0)
+|   |   classification = Religious: Transportation (0.0)
+|   |   classification = Right-Wing_Conservative: Transportation (0.0)
+|   |   classification = Right-Wing_Reactionary: Transportation (0.0)
+|   |   classification = n/a: Transportation (0.0)
+|   |   classification = Other: Business (5.0/3.0)
+|   continent = South_Asia
+|   |   classification = Anarchist: Educational_Institution (0.0)
+|   |   classification = Anti-Globalization: Educational_Institution (0.0)
+|   |   classification = Communist/Socialist: Transportation (22.0/16.0)
+|   |   classification = Environmental: Educational_Institution (0.0)
+|   |   classification = Leftist: Educational_Institution (0.0)
+|   |   classification = Nationalist/Separatist: Utilities (26.0/18.0)
+|   |   classification = Racist: Educational_Institution (0.0)
+|   |   classification = Religious: Educational_Institution (154.0/107.0)
+|   |   classification = Right-Wing_Conservative: Educational_Institution (0.0)
+|   |   classification = Right-Wing_Reactionary: Educational_Institution (0.0)
+|   |   classification = n/a: Educational_Institution (0.0)
+|   |   classification = Other: Transportation (1.0)
+attackType = Hijacking: Airports_&_Airlines (49.0/23.0)
+attackType = Hostage_Taking_(Barricade_Incident)
+|   continent = Africa: Business (3.0/2.0)
+|   continent = Australia-Oceania: Business (0.0)
+|   continent = Central_America_and_Caribbean: Government_(General) (4.0/3.0)
+|   continent = Central_Asia: Private_Citizens_&_Property (1.0)
+|   continent = East_&_Southeast_Asia: Private_Citizens_&_Property (24.0/16.0)
+|   continent = Europe: Business (27.0/17.0)
+|   continent = Middle_East: Business (14.0/6.0)
+|   continent = North_America: Government_(Diplomatic) (1.0)
+|   continent = South_America
+|   |   classification = Anarchist: Private_Citizens_&_Property (0.0)
+|   |   classification = Anti-Globalization: Private_Citizens_&_Property (0.0)
+|   |   classification = Communist/Socialist: Private_Citizens_&_Property (9.0/4.0)
+|   |   classification = Environmental: Private_Citizens_&_Property (0.0)
+|   |   classification = Leftist: Journalists_&_Media (2.0/1.0)
+|   |   classification = Nationalist/Separatist: Private_Citizens_&_Property (0.0)
+|   |   classification = Racist: Private_Citizens_&_Property (0.0)
+|   |   classification = Religious: Private_Citizens_&_Property (0.0)
+|   |   classification = Right-Wing_Conservative: Private_Citizens_&_Property (0.0)
+|   |   classification = Right-Wing_Reactionary: Private_Citizens_&_Property (0.0)
+|   |   classification = n/a: Private_Citizens_&_Property (0.0)
+|   |   classification = Other: Journalists_&_Media (1.0)
+|   continent = South_Asia: Police (14.0/7.0)
+attackType = Hostage_Taking_(Kidnapping)
+|   continent = Africa
+|   |   classification = Anarchist: Private_Citizens_&_Property (0.0)
+|   |   classification = Anti-Globalization: Private_Citizens_&_Property (0.0)
+|   |   classification = Communist/Socialist: Airports_&_Airlines (1.0)
+|   |   classification = Environmental: Private_Citizens_&_Property (0.0)
+|   |   classification = Leftist: Educational_Institution (1.0)
+|   |   classification = Nationalist/Separatist: Business (27.0/20.0)
+|   |   classification = Racist: Private_Citizens_&_Property (0.0)
+|   |   classification = Religious: Private_Citizens_&_Property (33.0/8.0)
+|   |   classification = Right-Wing_Conservative: Private_Citizens_&_Property (0.0)
+|   |   classification = Right-Wing_Reactionary: Private_Citizens_&_Property (0.0)
+|   |   classification = n/a: Private_Citizens_&_Property (0.0)
+|   |   classification = Other: Private_Citizens_&_Property (9.0/5.0)
+|   continent = Australia-Oceania: Private_Citizens_&_Property (0.0)
+|   continent = Central_America_and_Caribbean
+|   |   classification = Anarchist: Business (0.0)
+|   |   classification = Anti-Globalization: Business (0.0)
+|   |   classification = Communist/Socialist: Business (1.0)
+|   |   classification = Environmental: Business (0.0)
+|   |   classification = Leftist: Business (6.0/3.0)
+|   |   classification = Nationalist/Separatist: Business (0.0)
+|   |   classification = Racist: Business (0.0)
+|   |   classification = Religious: Business (0.0)
+|   |   classification = Right-Wing_Conservative: Business (0.0)
+|   |   classification = Right-Wing_Reactionary: Government_(General) (2.0)
+|   |   classification = n/a: Business (0.0)
+|   |   classification = Other: Private_Citizens_&_Property (6.0/3.0)
+|   continent = Central_Asia: Tourists (2.0)
+|   continent = East_&_Southeast_Asia: Private_Citizens_&_Property (217.0/145.0)
+|   continent = Europe: Business (115.0/55.0)
+|   continent = Middle_East: Private_Citizens_&_Property (80.0/53.0)
+|   continent = North_America: Business (14.0/6.0)
+|   continent = South_America
+|   |   classification = Anarchist: Journalists_&_Media (1.0)
+|   |   classification = Anti-Globalization: Private_Citizens_&_Property (1.0)
+|   |   classification = Communist/Socialist: Business (267.0/183.0)
+|   |   classification = Environmental: Business (0.0)
+|   |   classification = Leftist: Private_Citizens_&_Property (6.0/4.0)
+|   |   classification = Nationalist/Separatist: Business (0.0)
+|   |   classification = Racist: Business (0.0)
+|   |   classification = Religious: Business (0.0)
+|   |   classification = Right-Wing_Conservative: Business (0.0)
+|   |   classification = Right-Wing_Reactionary: Business (0.0)
+|   |   classification = n/a: Business (0.0)
+|   |   classification = Other: Government_(General) (9.0/6.0)
+|   continent = South_Asia: Private_Citizens_&_Property (323.0/234.0)
+attackType = Unarmed_Assault
+|   classification = Anarchist: Private_Citizens_&_Property (0.0)
+|   classification = Anti-Globalization: Private_Citizens_&_Property (0.0)
+|   classification = Communist/Socialist: Private_Citizens_&_Property (14.0/7.0)
+|   classification = Environmental: Private_Citizens_&_Property (0.0)
+|   classification = Leftist: Airports_&_Airlines (3.0/1.0)
+|   classification = Nationalist/Separatist: Private_Citizens_&_Property (69.0/11.0)
+|   classification = Racist: Private_Citizens_&_Property (0.0)
+|   classification = Religious
+|   |   continent = Africa: Private_Citizens_&_Property (13.0/3.0)
+|   |   continent = Australia-Oceania: Police (0.0)
+|   |   continent = Central_America_and_Caribbean: Police (0.0)
+|   |   continent = Central_Asia: Police (0.0)
+|   |   continent = East_&_Southeast_Asia: Military (8.0/3.0)
+|   |   continent = Europe: Police (0.0)
+|   |   continent = Middle_East: Private_Citizens_&_Property (1.0)
+|   |   continent = North_America: Police (0.0)
+|   |   continent = South_America: Police (0.0)
+|   |   continent = South_Asia: Police (34.0/17.0)
+|   classification = Right-Wing_Conservative: Private_Citizens_&_Property (0.0)
+|   classification = Right-Wing_Reactionary: Private_Citizens_&_Property (0.0)
+|   classification = n/a: Private_Citizens_&_Property (0.0)
+|   classification = Other: Private_Citizens_&_Property (0.0)
+attackType = Unknown
+|   continent = Africa
+|   |   classification = Anarchist: Private_Citizens_&_Property (0.0)
+|   |   classification = Anti-Globalization: Private_Citizens_&_Property (0.0)
+|   |   classification = Communist/Socialist: Private_Citizens_&_Property (0.0)
+|   |   classification = Environmental: Private_Citizens_&_Property (0.0)
+|   |   classification = Leftist: Private_Citizens_&_Property (0.0)
+|   |   classification = Nationalist/Separatist: Military (3.0/1.0)
+|   |   classification = Racist: Private_Citizens_&_Property (0.0)
+|   |   classification = Religious: Private_Citizens_&_Property (10.0/4.0)
+|   |   classification = Right-Wing_Conservative: Private_Citizens_&_Property (0.0)
+|   |   classification = Right-Wing_Reactionary: Private_Citizens_&_Property (0.0)
+|   |   classification = n/a: Private_Citizens_&_Property (0.0)
+|   |   classification = Other: NGO (5.0/4.0)
+|   continent = Australia-Oceania: Private_Citizens_&_Property (0.0)
+|   continent = Central_America_and_Caribbean: Government_(General) (26.0/10.0)
+|   continent = Central_Asia: Private_Citizens_&_Property (0.0)
+|   continent = East_&_Southeast_Asia
+|   |   classification = Anarchist: Military (0.0)
+|   |   classification = Anti-Globalization: Military (0.0)
+|   |   classification = Communist/Socialist: Utilities (91.0/62.0)
+|   |   classification = Environmental: Military (0.0)
+|   |   classification = Leftist: Military (0.0)
+|   |   classification = Nationalist/Separatist: Police (2.0)
+|   |   classification = Racist: Military (0.0)
+|   |   classification = Religious: Military (15.0/10.0)
+|   |   classification = Right-Wing_Conservative: Business (1.0)
+|   |   classification = Right-Wing_Reactionary: Military (0.0)
+|   |   classification = n/a: Military (0.0)
+|   |   classification = Other: Military (0.0)
+|   continent = Europe: Business (49.0/30.0)
+|   continent = Middle_East: Military (37.0/27.0)
+|   continent = North_America: Business (4.0/2.0)
+|   continent = South_America: Police (120.0/73.0)
+|   continent = South_Asia
+|   |   classification = Anarchist: Private_Citizens_&_Property (0.0)
+|   |   classification = Anti-Globalization: Private_Citizens_&_Property (0.0)
+|   |   classification = Communist/Socialist: Police (3.0/1.0)
+|   |   classification = Environmental: Private_Citizens_&_Property (0.0)
+|   |   classification = Leftist: Private_Citizens_&_Property (0.0)
+|   |   classification = Nationalist/Separatist: Private_Citizens_&_Property (12.0/9.0)
+|   |   classification = Racist: Private_Citizens_&_Property (0.0)
+|   |   classification = Religious: Military (8.0/5.0)
+|   |   classification = Right-Wing_Conservative: Private_Citizens_&_Property (0.0)
+|   |   classification = Right-Wing_Reactionary: Private_Citizens_&_Property (0.0)
+|   |   classification = n/a: Private_Citizens_&_Property (0.0)
+|   |   classification = Other: Private_Citizens_&_Property (0.0)
+
+Number of Leaves  : 	400
+
+Size of the tree : 	438
+
+
+Time taken to build model: 0.02 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances        4405               33.6825 %
+Incorrectly Classified Instances      8673               66.3175 %
+Kappa statistic                          0.2214
+Mean absolute error                      0.0721
+Root mean squared error                  0.191 
+Relative absolute error                 90.5256 %
+Root relative squared error             95.6845 %
+Total Number of Instances            13078     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 1         0          0.75      1         0.857      1        Abortion_Related
+                 0.193     0.002      0.509     0.193     0.28       0.776    Airports_&_Airlines
+                 0.554     0.175      0.38      0.554     0.451      0.757    Business
+                 0.176     0.009      0.295     0.176     0.221      0.823    Educational_Institution
+                 0         0          0         0         0          0.628    Food_or_Water_Supply
+                 0.028     0          0.571     0.028     0.054      0.689    Government_(Diplomatic)
+                 0.131     0.042      0.292     0.131     0.181      0.676    Government_(General)
+                 0         0          0         0         0          0.687    Journalists_&_Media
+                 0         0          0         0         0          0.73     Maritime
+                 0.521     0.145      0.37      0.521     0.432      0.772    Military
+                 0         0          0         0         0          0.73     NGO
+                 0         0          0         0         0          0.67     Other
+                 0.259     0.066      0.427     0.259     0.323      0.706    Police
+                 0.511     0.271      0.294     0.511     0.373      0.701    Private_Citizens_&_Property
+                 0.017     0          0.5       0.017     0.033      0.773    Religious_Figures/Institutions
+                 0         0          0         0         0          0.754    Telecommunication
+                 0         0          0         0         0          0.755    Terrorists
+                 0.037     0          1         0.037     0.071      0.721    Tourists
+                 0.159     0.025      0.24      0.159     0.191      0.704    Transportation
+                 0         0          0         0         0          0.623    Unknown
+                 0.288     0.043      0.196     0.288     0.233      0.853    Utilities
+                 0         0          0         0         0          0.858    Violent_Political_Party
+Weighted Avg.    0.337     0.116      0.325     0.337     0.301      0.729
+
+=== Confusion Matrix ===
+
+    a    b    c    d    e    f    g    h    i    j    k    l    m    n    o    p    q    r    s    t    u    v   <-- classified as
+    3    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0 |    a = Abortion_Related
+    0   28   68    1    0    1    1    0    0   12    0    0    2   26    0    0    0    0    1    0    5    0 |    b = Airports_&_Airlines
+    0    6 1176   12    0    1   44    0    0  166    0    0  182  353    4    1    0    0   67    0  111    0 |    c = Business
+    0    0   35   49    0    0   22    0    0    8    0    0   10  146    0    0    0    0    5    0    3    0 |    d = Educational_Institution
+    0    0    2    1    0    0    2    0    0    4    0    0    1    5    0    0    0    0    0    0    2    0 |    e = Food_or_Water_Supply
+    1    1  124    2    0    8   14    0    0   22    0    0   33   67    0    0    0    0    6    0    6    0 |    f = Government_(Diplomatic)
+    0    0  372   18    0    1  199    0    0  127    0    1  134  576    0    0    0    0   39    0   51    0 |    g = Government_(General)
+    0    0   73    2    0    0    7    0    0    7    0    1   16   53    0    0    0    0    2    0    7    0 |    h = Journalists_&_Media
+    0    4    7    0    0    0    0    0    0    6    0    0    1    7    0    0    0    0    0    0    0    0 |    i = Maritime
+    0    1  131   10    0    1   83    0    0  957    0    0  140  367    0    0    0    0   41    0  106    0 |    j = Military
+    0    1   19    4    0    0    4    0    0   26    0    0    5   77    0    0    0    0    4    0    2    0 |    k = NGO
+    0    2   62   12    0    0   20    0    0   37    0    0   12  167    0    0    0    0    4    0    9    0 |    l = Other
+    0    0  343   12    0    0  131    0    0  446    1    0  539  491    0    0    0    0   36    0   82    0 |    m = Police
+    0    3  277   19    0    2   97    0    0  490    1    0  129 1210    0    0    0    0   45    0   96    0 |    n = Private_Citizens_&_Property
+    0    0   54    1    0    0   17    0    0   20    1    0    2  128    4    0    0    0    3    0    6    0 |    o = Religious_Figures/Institutions
+    0    0   55    8    0    0    1    0    0    9    0    0    3   16    0    0    0    0   21    0    8    0 |    p = Telecommunication
+    0    0    4    1    0    0   12    0    0   18    0    0   19   64    0    0    0    0    0    0    3    0 |    q = Terrorists
+    0    0   22    1    0    0    2    0    0    7    0    0    2   18    0    0    0    2    0    0    0    0 |    r = Tourists
+    0    9  118    9    0    0   10    0    0  163    0    0   19  167    0    0    0    0   99    0   30    0 |    s = Transportation
+    0    0   26    0    0    0    3    0    0    9    0    0    2   21    0    0    0    0    1    0    9    0 |    t = Unknown
+    0    0  127    4    0    0    1    0    0   44    0    0    4  105    0    0    0    0   39    0  131    0 |    u = Utilities
+    0    0    2    0    0    0   12    0    0   11    1    0    6   48    0    0    0    0    0    0    1    0 |    v = Violent_Political_Party
+

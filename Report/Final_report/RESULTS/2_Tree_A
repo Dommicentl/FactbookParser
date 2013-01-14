@@ -1,0 +1,145 @@
+=== Run information ===
+
+Scheme:weka.classifiers.trees.J48 -C 0.25 -M 2
+Relation:     titanic-weka.filters.unsupervised.attribute.Remove-R1,4
+Instances:    13078
+Attributes:   3
+              classification
+              continent
+              attackType
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+
+continent = Africa
+|   classification = Anarchist: Armed_Assault (0.0)
+|   classification = Anti-Globalization: Armed_Assault (0.0)
+|   classification = Communist/Socialist: Armed_Assault (2.0/1.0)
+|   classification = Environmental: Armed_Assault (0.0)
+|   classification = Leftist: Armed_Assault (3.0/2.0)
+|   classification = Nationalist/Separatist: Bombing/Explosion (120.0/76.0)
+|   classification = Racist: Armed_Assault (0.0)
+|   classification = Religious: Armed_Assault (156.0/88.0)
+|   classification = Right-Wing_Conservative: Armed_Assault (0.0)
+|   classification = Right-Wing_Reactionary: Armed_Assault (0.0)
+|   classification = n/a: Armed_Assault (0.0)
+|   classification = Other: Bombing/Explosion (90.0/51.0)
+continent = Australia-Oceania: Bombing/Explosion (4.0/1.0)
+continent = Central_America_and_Caribbean: Armed_Assault (288.0/148.0)
+continent = Central_Asia: Bombing/Explosion (13.0/7.0)
+continent = East_&_Southeast_Asia
+|   classification = Anarchist: Armed_Assault (0.0)
+|   classification = Anti-Globalization: Armed_Assault (0.0)
+|   classification = Communist/Socialist: Armed_Assault (1454.0/928.0)
+|   classification = Environmental: Armed_Assault (0.0)
+|   classification = Leftist: Armed_Assault (0.0)
+|   classification = Nationalist/Separatist: Armed_Assault (23.0/13.0)
+|   classification = Racist: Armed_Assault (0.0)
+|   classification = Religious: Bombing/Explosion (907.0/480.0)
+|   classification = Right-Wing_Conservative: Assassination (3.0/2.0)
+|   classification = Right-Wing_Reactionary: Armed_Assault (0.0)
+|   classification = n/a: Armed_Assault (0.0)
+|   classification = Other: Facility/Infrastructure_Attack (2.0/1.0)
+continent = Europe: Bombing/Explosion (3234.0/1510.0)
+continent = Middle_East
+|   classification = Anarchist: Bombing/Explosion (0.0)
+|   classification = Anti-Globalization: Bombing/Explosion (0.0)
+|   classification = Communist/Socialist: Bombing/Explosion (2.0)
+|   classification = Environmental: Bombing/Explosion (0.0)
+|   classification = Leftist: Bombing/Explosion (7.0/4.0)
+|   classification = Nationalist/Separatist: Armed_Assault (1384.0/787.0)
+|   classification = Racist: Bombing/Explosion (0.0)
+|   classification = Religious: Bombing/Explosion (222.0/60.0)
+|   classification = Right-Wing_Conservative: Bombing/Explosion (0.0)
+|   classification = Right-Wing_Reactionary: Bombing/Explosion (0.0)
+|   classification = n/a: Bombing/Explosion (0.0)
+|   classification = Other: Bombing/Explosion (34.0/9.0)
+continent = North_America
+|   classification = Anarchist: Armed_Assault (0.0)
+|   classification = Anti-Globalization: Armed_Assault (0.0)
+|   classification = Communist/Socialist: Armed_Assault (62.0/25.0)
+|   classification = Environmental: Bombing/Explosion (6.0/3.0)
+|   classification = Leftist: Hostage_Taking_(Kidnapping) (1.0)
+|   classification = Nationalist/Separatist: Bombing/Explosion (7.0/3.0)
+|   classification = Racist: Armed_Assault (0.0)
+|   classification = Religious: Assassination (3.0)
+|   classification = Right-Wing_Conservative: Armed_Assault (0.0)
+|   classification = Right-Wing_Reactionary: Armed_Assault (0.0)
+|   classification = n/a: Armed_Assault (0.0)
+|   classification = Other: Bombing/Explosion (1.0)
+continent = South_America
+|   classification = Anarchist: Hostage_Taking_(Kidnapping) (1.0)
+|   classification = Anti-Globalization: Hostage_Taking_(Kidnapping) (1.0)
+|   classification = Communist/Socialist: Armed_Assault (1863.0/1248.0)
+|   classification = Environmental: Bombing/Explosion (0.0)
+|   classification = Leftist: Bombing/Explosion (140.0/68.0)
+|   classification = Nationalist/Separatist: Armed_Assault (3.0/1.0)
+|   classification = Racist: Bombing/Explosion (0.0)
+|   classification = Religious: Bombing/Explosion (0.0)
+|   classification = Right-Wing_Conservative: Assassination (1.0)
+|   classification = Right-Wing_Reactionary: Bombing/Explosion (0.0)
+|   classification = n/a: Bombing/Explosion (1.0)
+|   classification = Other: Bombing/Explosion (142.0/48.0)
+continent = South_Asia
+|   classification = Anarchist: Bombing/Explosion (0.0)
+|   classification = Anti-Globalization: Bombing/Explosion (0.0)
+|   classification = Communist/Socialist: Bombing/Explosion (128.0/78.0)
+|   classification = Environmental: Bombing/Explosion (0.0)
+|   classification = Leftist: Unarmed_Assault (1.0)
+|   classification = Nationalist/Separatist: Armed_Assault (803.0/502.0)
+|   classification = Racist: Bombing/Explosion (0.0)
+|   classification = Religious: Bombing/Explosion (1957.0/1101.0)
+|   classification = Right-Wing_Conservative: Bombing/Explosion (0.0)
+|   classification = Right-Wing_Reactionary: Bombing/Explosion (0.0)
+|   classification = n/a: Bombing/Explosion (0.0)
+|   classification = Other: Armed_Assault (9.0/4.0)
+
+Number of Leaves  : 	76
+
+Size of the tree : 	83
+
+
+Time taken to build model: 0.01 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances        5786               44.2422 %
+Incorrectly Classified Instances      7292               55.7578 %
+Kappa statistic                          0.151 
+Mean absolute error                      0.1551
+Root mean squared error                  0.2789
+Relative absolute error                 94.4251 %
+Root relative squared error             97.3416 %
+Total Number of Instances            13078     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.603     0.379      0.378     0.603     0.465      0.66     Armed_Assault
+                 0.002     0.001      0.3       0.002     0.004      0.698    Assassination
+                 0.695     0.467      0.494     0.695     0.577      0.648    Bombing/Explosion
+                 0         0          0         0         0          0.573    Facility/Infrastructure_Attack
+                 0         0          0         0         0          0.577    Hijacking
+                 0         0          0         0         0          0.516    Hostage_Taking_(Barricade_Incident)
+                 0         0          0         0         0          0.653    Hostage_Taking_(Kidnapping)
+                 0         0          0         0         0          0.778    Unarmed_Assault
+                 0         0          0         0         0          0.689    Unknown
+Weighted Avg.    0.442     0.29       0.335     0.442     0.358      0.654
+
+=== Confusion Matrix ===
+
+    a    b    c    d    e    f    g    h    i   <-- classified as
+ 2183    0 1438    0    0    0    2    0    0 |    a = Armed_Assault
+  665    3  855    0    0    0    1    0    1 |    b = Assassination
+ 1576    4 3600    0    0    0    1    0    1 |    c = Bombing/Explosion
+  370    0  579    0    0    1    0    0    0 |    d = Facility/Infrastructure_Attack
+   20    0   29    0    0    0    0    0    0 |    e = Hijacking
+   43    1   55    1    0    0    0    0    0 |    f = Hostage_Taking_(Barricade_Incident)
+  545    1  575    0    0    0    0    0    0 |    g = Hostage_Taking_(Kidnapping)
+   76    0   66    0    0    0    0    0    0 |    h = Unarmed_Assault
+  291    1   94    0    0    0    0    0    0 |    i = Unknown
+

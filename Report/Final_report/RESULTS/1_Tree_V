@@ -1,0 +1,135 @@
+=== Run information ===
+
+Scheme:weka.classifiers.trees.J48 -C 0.25 -M 2
+Relation:     titanic-weka.filters.unsupervised.attribute.Remove-R1,5
+Instances:    231
+Attributes:   3
+              classification
+              continent
+              victimType
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+
+continent = Africa: Private_Citizens_&_Property (17.0/13.0)
+continent = Australia-Oceania: Government_(Diplomatic) (1.0)
+continent = Central_America_and_Caribbean: Government_(Diplomatic) (12.0/8.0)
+continent = Central_Asia: Military (6.0/4.0)
+continent = East_&_Southeast_Asia
+|   classification = Anarchist: Business (0.0)
+|   classification = Anti-Globalization: Business (0.0)
+|   classification = Communist/Socialist: Government_(Diplomatic) (5.0/3.0)
+|   classification = Environmental: Business (0.0)
+|   classification = Leftist: Business (0.0)
+|   classification = Nationalist/Separatist: Private_Citizens_&_Property (3.0/1.0)
+|   classification = Racist: Business (0.0)
+|   classification = Religious: Business (13.0/9.0)
+|   classification = Right-Wing_Conservative: Business (2.0/1.0)
+|   classification = Right-Wing_Reactionary: Business (0.0)
+|   classification = n/a: Business (0.0)
+|   classification = Other: Airports_&_Airlines (1.0)
+continent = Europe: Business (67.0/40.0)
+continent = Middle_East: Government_(Diplomatic) (41.0/29.0)
+continent = North_America: Business (4.0/2.0)
+continent = South_America
+|   classification = Anarchist: Journalists_&_Media (1.0)
+|   classification = Anti-Globalization: Private_Citizens_&_Property (1.0)
+|   classification = Communist/Socialist: Government_(Diplomatic) (5.0/3.0)
+|   classification = Environmental: Business (0.0)
+|   classification = Leftist: Business (6.0/3.0)
+|   classification = Nationalist/Separatist: Religious_Figures/Institutions (2.0/1.0)
+|   classification = Racist: Business (0.0)
+|   classification = Religious: Business (0.0)
+|   classification = Right-Wing_Conservative: Military (1.0)
+|   classification = Right-Wing_Reactionary: Business (0.0)
+|   classification = n/a: Government_(Diplomatic) (1.0)
+|   classification = Other: Business (7.0/4.0)
+continent = South_Asia
+|   classification = Anarchist: Private_Citizens_&_Property (0.0)
+|   classification = Anti-Globalization: Private_Citizens_&_Property (0.0)
+|   classification = Communist/Socialist: Police (3.0/1.0)
+|   classification = Environmental: Private_Citizens_&_Property (0.0)
+|   classification = Leftist: Private_Citizens_&_Property (0.0)
+|   classification = Nationalist/Separatist: Private_Citizens_&_Property (19.0/10.0)
+|   classification = Racist: Private_Citizens_&_Property (0.0)
+|   classification = Religious: Private_Citizens_&_Property (12.0/7.0)
+|   classification = Right-Wing_Conservative: Private_Citizens_&_Property (0.0)
+|   classification = Right-Wing_Reactionary: Private_Citizens_&_Property (0.0)
+|   classification = n/a: Private_Citizens_&_Property (0.0)
+|   classification = Other: Transportation (1.0)
+
+Number of Leaves  : 	43
+
+Size of the tree : 	47
+
+
+Time taken to build model: 0 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances          63               27.2727 %
+Incorrectly Classified Instances       168               72.7273 %
+Kappa statistic                          0.1115
+Mean absolute error                      0.0759
+Root mean squared error                  0.2068
+Relative absolute error                 94.8033 %
+Root relative squared error            103.7664 %
+Total Number of Instances              231     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0         0          0         0         0          ?        Abortion_Related
+                 0         0.027      0         0         0          0.513    Airports_&_Airlines
+                 0.725     0.394      0.343     0.725     0.465      0.658    Business
+                 0         0          0         0         0          0.232    Educational_Institution
+                 0         0          0         0         0          ?        Food_or_Water_Supply
+                 0.233     0.202      0.208     0.233     0.22       0.538    Government_(Diplomatic)
+                 0         0.014      0         0         0          0.476    Government_(General)
+                 0         0          0         0         0          0.344    Journalists_&_Media
+                 0         0          0         0         0          ?        Maritime
+                 0         0.043      0         0         0          0.518    Military
+                 0         0          0         0         0          0.531    NGO
+                 0         0          0         0         0          0.361    Other
+                 0         0.005      0         0         0          0.541    Police
+                 0.485     0.192      0.296     0.485     0.368      0.696    Private_Citizens_&_Property
+                 0         0.004      0         0         0          0.396    Religious_Figures/Institutions
+                 0         0.004      0         0         0          0.404    Telecommunication
+                 0         0          0         0         0          0.317    Terrorists
+                 0         0          0         0         0          0.41     Tourists
+                 0         0          0         0         0          0.391    Transportation
+                 0         0          0         0         0          ?        Unknown
+                 0         0          0         0         0          0.319    Utilities
+                 0         0          0         0         0          0.276    Violent_Political_Party
+Weighted Avg.    0.273     0.159      0.157     0.273     0.196      0.547
+
+=== Confusion Matrix ===
+
+  a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v   <-- classified as
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  a = Abortion_Related
+  0  0  6  0  0  3  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0 |  b = Airports_&_Airlines
+  0  1 37  0  0  7  1  0  0  0  0  0  0  5  0  0  0  0  0  0  0  0 |  c = Business
+  0  0  1  0  0  2  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0 |  d = Educational_Institution
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  e = Food_or_Water_Supply
+  0  1 23  0  0 10  0  0  0  3  0  0  0  6  0  0  0  0  0  0  0  0 |  f = Government_(Diplomatic)
+  0  0 10  0  0  4  0  0  0  1  0  0  0  7  0  0  0  0  0  0  0  0 |  g = Government_(General)
+  0  1  3  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  h = Journalists_&_Media
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  i = Maritime
+  0  0  5  0  0  8  2  0  0  0  0  0  1  4  0  0  0  0  0  0  0  0 |  j = Military
+  0  1  2  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0 |  k = NGO
+  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  l = Other
+  0  0  3  0  0  1  0  0  0  1  0  0  0  4  0  0  0  0  0  0  0  0 |  m = Police
+  0  1  7  0  0  6  0  0  0  3  0  0  0 16  0  0  0  0  0  0  0  0 |  n = Private_Citizens_&_Property
+  0  0  4  0  0  1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0 |  o = Religious_Figures/Institutions
+  0  0  0  0  0  1  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 |  p = Telecommunication
+  0  0  1  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0 |  q = Terrorists
+  0  0  0  0  0  1  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0 |  r = Tourists
+  0  1  2  0  0  2  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0 |  s = Transportation
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  t = Unknown
+  0  0  2  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0 |  u = Utilities
+  0  0  1  0  0  1  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0 |  v = Violent_Political_Party
+

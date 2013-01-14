@@ -1,0 +1,40 @@
+=== Run information ===
+
+Scheme:       weka.associations.Apriori -N 10 -T 0 -C 0.5 -D 0.05 -U 1.0 -M 0.1 -S -1.0 -c -1
+Relation:     titanic-weka.filters.unsupervised.attribute.Remove-R1,4
+Instances:    13078
+Attributes:   3
+              classification
+              continent
+              attackType
+=== Associator model (full training set) ===
+
+
+Apriori
+=======
+
+Minimum support: 0.1 (1308 instances)
+Minimum metric <confidence>: 0.5
+Number of cycles performed: 18
+
+Generated sets of large itemsets:
+
+Size of set of large itemsets L(1): 11
+
+Size of set of large itemsets L(2): 9
+
+Size of set of large itemsets L(3): 1
+
+Best rules found:
+
+ 1. continent=South_America 2152 ==> classification=Communist/Socialist 1863    conf:(0.87)
+ 2. continent=Middle_East 1649 ==> classification=Nationalist/Separatist 1384    conf:(0.84)
+ 3. continent=Europe attackType=Bombing/Explosion 1724 ==> classification=Nationalist/Separatist 1335    conf:(0.77)
+ 4. continent=Europe 3234 ==> classification=Nationalist/Separatist 2470    conf:(0.76)
+ 5. continent=South_Asia 2898 ==> classification=Religious 1957    conf:(0.68)
+ 6. classification=Nationalist/Separatist attackType=Bombing/Explosion 2123 ==> continent=Europe 1335    conf:(0.63)
+ 7. continent=East_&_Southeast_Asia 2389 ==> classification=Communist/Socialist 1454    conf:(0.61)
+ 8. classification=Religious 3268 ==> continent=South_Asia 1957    conf:(0.6)
+ 9. classification=Nationalist/Separatist continent=Europe 2470 ==> attackType=Bombing/Explosion 1335    conf:(0.54)
+10. continent=Europe 3234 ==> attackType=Bombing/Explosion 1724    conf:(0.53)
+

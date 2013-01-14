@@ -1,0 +1,64 @@
+=== Run information ===
+
+Scheme:weka.classifiers.trees.J48 -C 0.25 -M 2
+Relation:     titanic-weka.filters.unsupervised.attribute.Remove-R1
+Instances:    231
+Attributes:   4
+              classification
+              continent
+              victimType
+              attackType
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+: Bombing/Explosion (231.0/104.0)
+
+Number of Leaves  : 	1
+
+Size of the tree : 	1
+
+
+Time taken to build model: 0 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances         127               54.9784 %
+Incorrectly Classified Instances       104               45.0216 %
+Kappa statistic                          0     
+Mean absolute error                      0.1443
+Root mean squared error                  0.2687
+Relative absolute error                 98.492  %
+Root relative squared error             99.9706 %
+Total Number of Instances              231     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0         0          0         0         0          0.484    Armed_Assault
+                 0         0          0         0         0          0.409    Assassination
+                 1         1          0.55      1         0.709      0.48     Bombing/Explosion
+                 0         0          0         0         0          0.431    Facility/Infrastructure_Attack
+                 0         0          0         0         0          0.244    Hijacking
+                 0         0          0         0         0          0.194    Hostage_Taking_(Barricade_Incident)
+                 0         0          0         0         0          0.472    Hostage_Taking_(Kidnapping)
+                 0         0          0         0         0          0.05     Unarmed_Assault
+                 0         0          0         0         0          0.096    Unknown
+Weighted Avg.    0.55      0.55       0.302     0.55      0.39       0.457
+
+=== Confusion Matrix ===
+
+   a   b   c   d   e   f   g   h   i   <-- classified as
+   0   0  41   0   0   0   0   0   0 |   a = Armed_Assault
+   0   0  15   0   0   0   0   0   0 |   b = Assassination
+   0   0 127   0   0   0   0   0   0 |   c = Bombing/Explosion
+   0   0  17   0   0   0   0   0   0 |   d = Facility/Infrastructure_Attack
+   0   0   5   0   0   0   0   0   0 |   e = Hijacking
+   0   0   4   0   0   0   0   0   0 |   f = Hostage_Taking_(Barricade_Incident)
+   0   0  19   0   0   0   0   0   0 |   g = Hostage_Taking_(Kidnapping)
+   0   0   1   0   0   0   0   0   0 |   h = Unarmed_Assault
+   0   0   2   0   0   0   0   0   0 |   i = Unknown
+

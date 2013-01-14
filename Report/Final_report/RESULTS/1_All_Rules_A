@@ -1,0 +1,33 @@
+=== Run information ===
+
+Scheme:       weka.associations.Apriori -N 10 -T 0 -C 0.5 -D 0.05 -U 1.0 -M 0.1 -S -1.0 -c -1
+Relation:     titanic-weka.filters.unsupervised.attribute.Remove-R1,4
+Instances:    231
+Attributes:   3
+              classification
+              continent
+              attackType
+=== Associator model (full training set) ===
+
+
+Apriori
+=======
+
+Minimum support: 0.1 (23 instances)
+Minimum metric <confidence>: 0.5
+Number of cycles performed: 18
+
+Generated sets of large itemsets:
+
+Size of set of large itemsets L(1): 12
+
+Size of set of large itemsets L(2): 5
+
+Best rules found:
+
+ 1. continent=Middle_East 41 ==> attackType=Bombing/Explosion 26    conf:(0.63)
+ 2. continent=Europe 67 ==> attackType=Bombing/Explosion 42    conf:(0.63)
+ 3. classification=Other 46 ==> attackType=Bombing/Explosion 28    conf:(0.61)
+ 4. classification=Religious 55 ==> attackType=Bombing/Explosion 31    conf:(0.56)
+ 5. classification=Nationalist/Separatist 53 ==> attackType=Bombing/Explosion 28    conf:(0.53)
+
