@@ -30,7 +30,7 @@ public class TableEntry {
 	private static Logger logger = Logger.getLogger(TableEntry.class.toString());
 	private static boolean allowDouble = true;
 	private static boolean addNeighbours = true;
-	private static boolean stripEmpty = false;
+	private static boolean stripEmpty = true;
 	private static TreeMap<String, String> neighbourMap = new TreeMap<String, String>();
 	private TreeMap<String, String> instanceNeighbourMap = new TreeMap<String, String>();
 	
@@ -67,9 +67,16 @@ public class TableEntry {
 	
 	private TableEntry(String name){
 		this.name = name;
-		instanceNeighbourMap = (TreeMap<String, String>) neighbourMap.clone(); 
+		instanceNeighbourMap = (TreeMap<String, String>) neighbourMap.clone();
+		emptyMap(instanceNeighbourMap);
 	}
 	
+	private void emptyMap(TreeMap<String, String> map) {
+		for(String current: map.keySet()){
+			map.put(current, "0");
+		}		
+	}
+
 	public void addNeighbour(String neighbour){
 		if(!addNeighbours)
 			return;

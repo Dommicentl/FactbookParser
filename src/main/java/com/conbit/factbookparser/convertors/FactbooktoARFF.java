@@ -19,7 +19,7 @@ public class FactbooktoARFF {
 	public static void main(String[] args) throws OWLOntologyCreationException, IOException {
 		PropertyConfigurator.configure("log4j.conf");
 		FactbooktoARFF convertor = new FactbooktoARFF("/home/leendert/Total.owl");
-		convertor.convert("/home/leendert/homework6.arff");
+		convertor.convert("/home/leendert/homework6_3.arff");
 	}
 
 	private OwlHandler handler;
