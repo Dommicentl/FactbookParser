@@ -1,0 +1,58 @@
+This ontology contains data from the following sources:
+- CIA The World Factbook [https://www.cia.gov/library/publications/the-world-factbook/]
+- GTD Global Terrorist Database [http://www.start.umd.edu/gtd/]
+- Terrorist Organization Profiles [http://www.start.umd.edu/start/data_collections/tops/]
+
+The ontology is based on the factbook ontology [http://www.daml.org/2001/12/factbook/factbook-ont]
+but we made the following adjustments:
+- GeographicCoordinates were moved to the data properties because we see this as a property instead of a relation to a coordinate individual.
+- We renamed their object relation Government to hasGovernment.
+- We removed the class latlon
+- We removed the Code object property and used the data property
+
+All data from the World Factbook is inserted in this ontology. We parsed the data as it was on
+November 7. However not all data was available for all countries. If the data was on the site
+you can find it in our ontology
+
+The ontology is extended with the following classes and relation from the Global Terrorist
+Database:
+Classes:
+  - Attack
+  - Perpetrator
+  - AttackType
+  - VictimType
+Object properties:
+  - believesIn (Perpetrator -> Religion)
+  - isFrom (Perpetrator -> Country)
+  - executed (Perpetrator -> Attack)
+  - executedBy (Attack -> Perpetrator)
+  - occured (Attack -> Country)
+  - hasVictim (Attack -> VictimType)
+  - ofType (Attack -> AttackType)
+Data properties:
+  - name (All classes)
+  - numberOfFatalities (Attack)
+  - id (Attack)
+  - date (Attack)
+We created individuals for all classes we added with data from the global terrorist database.
+We created the object relations executedBy, occured, hasVictim and ofType for every Attack
+individual. However sometimes the value of executedBy, hasVictim and ofType can be an individual
+named Other or Unknown. We didn't add relations of the executed type because it is just the
+inverse of executedBy. So a reasoner can just create this relations. We also didn't create any
+relations of the type believesIn or isFrom because the data wasn't available.
+
+We also extended the ontology with information from the Terrorist Organization Profiles. We added the following classes and relations:
+Classes:
+  - Classification
+Object properties:
+  - hasClassification (Perpetrator -> Organizations)
+  - hasBaseOfOperation (Perpetrator -> Country)
+Data properties
+  - name (All classes)
+We added an individual for all classifications we found in the database. For every perpetrator we
+also added hasClassification and hasBaseOfOperation relations for the Perpetrator for which we have data.
+Not all perpetrators from the GTD database were in the Terrorist Profiles database. So there are
+perpetrators that do not have a classification or bases of operations. 25% of the perpetrators have at
+least one classification and one base. Perpetrators can have more classifications an/or bases.
+
+The topology does not contain conflicts. It's tested without individuals.
